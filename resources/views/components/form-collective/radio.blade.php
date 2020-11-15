@@ -1,3 +1,7 @@
+@php
+  $id = rand(1,999999);
+  $selected = (isset($attributes['value'])) ? $attributes['value'] : '';
+@endphp
 <div class="form-group row">
     <label class="col-12 col-lg-{{ $column[0] }}">{{ $label }}</label>
     <div class="col-12 col-lg-{{ $column[1] }}">
@@ -6,18 +10,20 @@
               @php
                   $text = explode("|", $text);
               @endphp
-              <div class="icheck-{{$color}} d-inline">
+              <div class="icheck-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!} d-inline">
                 <input 
-                    type="checkbox" 
-                    id="checkbox_{{$name}}_{{$val}}" 
+                    type="radio"
+                    id="checkbox_{{$id}}_{{$val}}" 
                     value="{{$val}}"
-                    {{ (in_array($val,$value)) ? 'checked' : '' }}
+                    {{ ($selected == $val) ? 'checked' : '' }}
                     @foreach ($text as $d => $i)
                         {{ ($d != 0) ? $i : '' }}
                     @endforeach
-                    {{ $attributes }}
+                    @foreach($attributes as $key => $row)
+                    {{ $key }} = "{{ $row }}"
+                    @endforeach
                 >
-                <label for="checkbox_{{$name}}_{{$val}}">
+                <label for="checkbox_{{$id}}_{{$val}}">
                     {{$text[0]}}
                 </label>
               </div>

@@ -1,7 +1,7 @@
 @isset($height)
 <div style="height: {{$height}}px; overflow: scroll;">
 @else
-<div>
+<div class="table-responsive">
 @endisset
 	<table class="table {!! ($class) ? $class : '' !!}">
 		{{ $slot }}

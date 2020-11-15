@@ -37,6 +37,11 @@ class SidebarMenu extends Component
                                 "icon" => 'far fa-circle'
                             ],
                             [
+                                "url" => route('template.form_collective'),
+                                "label" => 'Form Collective',
+                                "icon" => 'far fa-circle'
+                            ],
+                            [
                                 "url" => route('template.table'),
                                 "label" => 'Table',
                                 "icon" => 'far fa-circle'
@@ -62,6 +67,16 @@ class SidebarMenu extends Component
                                 "url" => route('backend.group'),
                                 "label" => 'Group',
                                 "icon" => 'fas fa-users'
+                            ],
+                            [
+                                "url" => route('backend.permission'),
+                                "label" => 'Permission',
+                                "icon" => 'fas fa-key'
+                            ],
+                            [
+                                "url" => route('backend.menu'),
+                                "label" => 'Menu',
+                                "icon" => 'fas fa-list'
                             ]
                         ]
                     ] 

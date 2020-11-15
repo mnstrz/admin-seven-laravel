@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f43ca3ceca77ef87dc254a8e5758b477",
+    "content-hash": "0ef13ca50cbc73d77387119bbafa3e77",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1427,6 +1427,49 @@
                 "psr-3"
             ],
             "time": "2020-07-23T08:41:23+00:00"
+        },
+        {
+            "name": "monsterz/pluginsreceh",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aazmonsterz/pluginsreceh.git",
+                "reference": "fd500a36c4036f39a685c795e9bceafee0d1e3fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aazmonsterz/pluginsreceh/zipball/fd500a36c4036f39a685c795e9bceafee0d1e3fe",
+                "reference": "fd500a36c4036f39a685c795e9bceafee0d1e3fe",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Monsterz\\Pluginsreceh\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Azhar Muhammad Noor",
+                    "email": "aazmuhammadnoor@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Small plugins for Laravel project",
+            "homepage": "https://github.com/aazmonsterz/pluginsreceh",
+            "keywords": [
+                "code",
+                "laravel",
+                "mnemonic"
+            ],
+            "time": "2020-10-29T10:27:01+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -6152,11 +6195,14 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "monsterz/pluginsreceh": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

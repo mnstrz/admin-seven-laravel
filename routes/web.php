@@ -28,6 +28,7 @@ Route::group([ 'prefix' => "backend"], function(){
 
 	/*templates*/
 	Route::get('/template/form', 'Admin\TemplateController@form')->name('template.form');
+	Route::get('/template/form-collective', 'Admin\TemplateController@formCollective')->name('template.form_collective');
 	Route::get('/template/table', 'Admin\TemplateController@table')->name('template.table');
 	Route::get('/template/blank', 'Admin\TemplateController@blank')->name('template.blank');
 
@@ -35,5 +36,7 @@ Route::group([ 'prefix' => "backend"], function(){
 	Route::get('/theming', 'Admin\ThemingController@index')->name('backend.theming');
 	Route::get('/group', 'Admin\ConfigurationController@group')->name('backend.group');
 	Route::get('/user', 'Admin\ConfigurationController@user')->name('backend.user');
+	Route::get('/menu', 'Admin\ConfigurationController@menu')->name('backend.menu');
+	Route::get('/permission', 'Admin\ConfigurationController@permission')->name('backend.permission');
 
 });

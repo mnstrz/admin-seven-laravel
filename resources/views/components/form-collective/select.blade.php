@@ -1,3 +1,8 @@
+@php
+    $color = (isset($attributes['color'])) ? $attributes['color'] : 'primary';
+    $class = (isset($attributes['class'])) ? $attributes['class'] : '';
+    $default = (isset($attributes['value'])) ? $attributes['value'] : '';
+@endphp
 <div class="form-group row">
     <label class="col-12 col-lg-{{ $column[0] }}">{{ $label }}</label>
     <div class="col-12 col-lg-{{ $column[1] }} {{ (isset($color)) ? 'select2-'.$color : '' }}">
@@ -7,9 +12,12 @@
             @isset($color)
                 data-dropdown-css-class="select2-{{$color}}"
             @endisset
-            {{ $attributes }}
+            @foreach($attributes as $key => $value)
+                {{ $key }} = "{{ $value }}"
+            @endforeach
             data-placeholder="{{ ($attributes['placeholder']) ? $attributes['placeholder'] : '' }}"
         >
+            <option hidden>Select One</option>
             @foreach($options as $val => $text)
                 @php
                     $text = explode("|", $text);
@@ -32,14 +40,18 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.select2').select2()
-            $('.select2').on('change', function (e) {
-                let elementName = $(this).attr('name');
-                var data = $(this).select2("val");
-                @this.set(elementName, data);
-                setTimeout(function(){ 
-                    $('.select2').select2() }, 
-                1000);
-            });
+            @if(isset($attributes['livewire']))
+                @if($attributes['livewire'])
+                    $('.select2').on('change', function (e) {
+                        let elementName = $(this).attr('wire:model.lazy');
+                        var data = $(this).select2("val");
+                        @this.set(elementName, data);
+                        setTimeout(function(){ 
+                            $('.select2').select2() }, 
+                        1500);
+                    });
+                @endif
+            @endif
         });
     </script>
 @endpush

@@ -7,9 +7,16 @@ $(document).ready(function () {
   }
 
 	//$('.sidebar-menu').tree()
-  if($('select2').length > 0){
+  if($('.select2').length > 0){
 	 $('.select2').select2()
   }
+
+  $('[data-tooltip="true"]').tooltip()
+
+
+  $(document).on("click",'[data-tooltip="true"]',function(e){
+    $(this).tooltip('hide');
+  })
 
   if($('.select2bs4').length > 0){
     $('.select2bs4').select2({
@@ -192,3 +199,14 @@ function openMenu(element)
     $(".menu-"+element).addClass('active menu-open');
   }, 1000);
 }
+
+$(document).on('click','.btn-password',function(e){
+    let id = $(this).data('id');
+    if($('#'+id).attr("type") == "text"){
+        $('#'+id).attr("type","password");
+        $(this).html(`<i class="fa fa-eye"></i>`);
+    }else{
+        $('#'+id).attr("type","text");
+        $(this).html(`<i class="fa fa-eye-slash"></i>`);
+    }
+})

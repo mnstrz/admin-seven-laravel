@@ -10,4 +10,12 @@ class Permission extends Model
     protected $fillable = [
 		'name'
 	];
+
+	/**
+     * has group
+     */
+    public function hasGroup()
+    {
+        return $this->hasMany('App\Models\GroupPermission', 'permission', 'id');
+    }
 }

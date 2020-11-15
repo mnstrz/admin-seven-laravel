@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Http\Livewire;
+
+use Livewire\Component;
+use App\Admin\AdminSevenCrud;
+use App\Models\GroupPermission;
+
+class BackendPermission extends Component
+{
+	use AdminSevenCrud;
+
+	public function prepare()
+	{
+		$this->setModel('Models.Permission');
+
+		$this->listRelationTo('hasGroup');
+		$this->listRelationTo('hasGroup.thisGroup');
+
+		$this->showRelationTo('hasGroup');
+		$this->showRelationTo('hasGroup.thisGroup');
+
+		$this->formWidth(6);
+		$this->showWidth(6);
+	}
+
+	public function setView()
+	{
+		$javascript = "openMenu('Configurations');activeMenu('Permission');";
+		$this->addJavascript($javascript);
+	}
+
+	public function setShow()
+	{
+		$this->showField('name','Permission Name');
+		$this->showField('hasGroup','Group')
+				->showFormat('getGroup');
+	}
+
+	public function setLists()
+	{
+		$this->listField('name','Permission Name');
+		$this->listField('hasGroup','Group')
+						->listFormat('getGroup');
+	}
+
+	public function getGroup($groups)
+	{
+		$display = '';
+		foreach($groups as $group){
+			$name = $group['this_group']['name'];
+			$display .= "<label class='badge bg-info mr-1'>$name</label>";
+		}
+		return $display;
+	}
+
+	public function setForm()
+	{
+		$this->formField('name','Permission Name');
+		$this->formField('group','Group')
+						->formType('checkbox')
+						->formRelation('Models.Group','id','name')
+						->formValidate("");
+	}
+
+	public function formStoring()
+	{
+		$data = new $this->model;
+		$data->name = $this->form['name'];
+		$data->save();
+
+		foreach($this->form['group'] as $group){
+			$group_permission = new GroupPermission;
+			$group_permission->permission = $data->id;
+			$group_permission->group = $group;
+			$group_permission->save();
+		}
+	}
+
+	public function afterEdit()
+	{
+		$group_permission = GroupPermission::where('permission',$this->selected_primary_key)->get();
+		$form_group = [];
+		foreach($group_permission as $group)
+		{
+			array_push($form_group, (string)$group->group);
+		}
+		$this->form_edit['group'] = $form_group;
+	}
+
+	public function formUpdating()
+	{
+		$data = $this->model::where($this->primary_key,$this->selected_primary_key)->first();
+		if(!$data){
+			abort('404');
+		}
+		$data->name = $this->form_edit['name'];
+		$data->save();
+
+		$group_permission = GroupPermission::where('permission',$data->id)->delete();
+		foreach($this->form_edit['group'] as $group){
+			$group_permission = new GroupPermission;
+			$group_permission->permission = $data->id;
+			$group_permission->group = $group;
+			$group_permission->save();
+		}
+	}
+
+	public function afterDelete()
+	{
+		GroupPermission::where('permission',$this->selected_primary_key)->delete();
+	}
+
+	public function updatedForm()
+	{
+		$this->form['group'] = $this->form['group'];
+	}
+
+	public function updatedFormEdit()
+	{
+		$this->form_edit['group'] = $this->form_edit['group'];
+	}
+}

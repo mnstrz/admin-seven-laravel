@@ -3,38 +3,36 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Group;
 use App\Admin\AdminSevenCrud;
 
 class BackendGroup extends Component
 {
 	use AdminSevenCrud;
 
-	public function __construct(){
-		
-		/**
-		 * you can change default in here
-		 * -------model-----------
-		 * $this->model = '';
-
-		 * -------pagination------
-		 * $this->perPage = 10;
-		 * $this->option_perpage = [1 => 1,3 => 3,4 => 4];
-		 */
-		$this->model = 'Group';
-		$this->filter()->field('name');
+	public function prepare()
+	{
+		$this->setModel('Models.Group');
 	}
 
-	/*
-	 * filters
-	 */
-	public $filters = [
-		'name' => 'text|like'
-	];
-	public $filter_name = '';
+	public function setView()
+	{
+		$javascript = "openMenu('Configurations');activeMenu('Group');";
+		$this->addJavascript($javascript);
+	}
 
-    public function render()
-    {
-        return view('livewire.backend.group');
-    }
+	public function setForm()
+	{
+		$this->formWidth(6);
+		$this->formField('name','Nama Group');
+	}
+
+	public function setFormEdit()
+	{
+		$this->formEditField('name','Nama Group');
+	}
+
+	public function setShow()
+	{
+		$this->showField('name','Nama Group');
+	}
 }

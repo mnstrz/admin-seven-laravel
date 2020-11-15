@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Admin\AdminSevenTrait;
-
 use App\Models\FakeTable;
+use App\Admin\AdminSevenTrait;
+use App\Admin\AdminSevenForm;
 
 class TemplateController extends Controller
 {
@@ -101,6 +101,26 @@ class TemplateController extends Controller
         ];
         $page = 'admin.template.table';
         $plugins = 'tableSimple tableDatatable tableJsgrid';
+
+        $response = [
+            'title','breadcrumb','page','plugins'
+        ];
+        return view('admin-seven',compact($response));
+    }
+
+    /**
+     * @method formCollective
+     * @return void
+     */
+    public function formCollective()
+    {
+        $title = $this->title.' Form Collective';
+        $breadcrumb = [
+            'Theming' => route('template.dashboard'),
+            'Form' => '#'
+        ];
+        $page = 'admin.template.form_collective';
+        $plugins = 'formAdvance formEditor';
 
         $response = [
             'title','breadcrumb','page','plugins'

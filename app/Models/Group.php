@@ -10,4 +10,20 @@ class Group extends Model
     protected $fillable = [
 		'name'
 	];
+
+	/**
+     * has user
+     */
+    public function hasUser()
+    {
+        return $this->hasMany('App\User', 'group', 'id');
+    }
+
+    /**
+     * has permission
+     */
+    public function hasPermission()
+    {
+        return $this->hasMany('App\Models\GroupPermission', 'group', 'id');
+    }
 }
