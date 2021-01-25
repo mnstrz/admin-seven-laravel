@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'email', 'password',
     ];
 
     /**
@@ -36,5 +36,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Models\Group', 'group', 'id');
 
+    }
+
+    public function setUsernameAttribute($value){
+        $value = preg_replace("/[^A-Za-z0-9 ]/", '', $value);
+        $this->attributes['username'] = $value;
+    }
+
+    public function setPasswordAttribute($value){
+        if($value){
+            $this->attributes['password'] = \Hash::make($value);
+        }
     }
 }

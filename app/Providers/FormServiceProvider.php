@@ -164,6 +164,17 @@ class FormServiceProvider extends ServiceProvider
         \Form::component('uploadFile', 'components.form-collective.upload', ['column','label','attributes' => [],'path', 'help']);
 
         /**
+         * @method uploadFile
+         * @param array $column
+         * @param string $label
+         * @param array $attributes
+         * @param array $setting
+         * @param string $path
+         * @param string help
+         */
+        \Form::component('uploadImage', 'components.form-collective.upload_image', ['column','label','attributes' => [],'setting' => [],'path', 'help']);
+
+        /**
          * @method inputTextarea
          * @param array $column
          * @param string $label

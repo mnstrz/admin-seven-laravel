@@ -22,21 +22,28 @@ Route::get('/', function () {
  */
 Route::group([ 'prefix' => "backend"], function(){
 
-	Route::get('/login', 'Auth\Admin\LoginController@showLoginForm')->name('backend.login');
+	Route::get('/login', 'Auth\LoginController@showLoginForm')->name('backend.login');
+	Route::post('/login', 'Auth\LoginController@login');
+	Route::post('/logout', 'Auth\LoginController@logout')->name('backend.logout');
+	Route::get('/logout', 'Auth\LoginController@logout');
 
-	Route::get('/', 'Admin\TemplateController@dashboard')->name('template.dashboard');
+	Route::group(['middleware' => 'auth'], function(){
 
-	/*templates*/
-	Route::get('/template/form', 'Admin\TemplateController@form')->name('template.form');
-	Route::get('/template/form-collective', 'Admin\TemplateController@formCollective')->name('template.form_collective');
-	Route::get('/template/table', 'Admin\TemplateController@table')->name('template.table');
-	Route::get('/template/blank', 'Admin\TemplateController@blank')->name('template.blank');
+		Route::get('/', 'Admin\TemplateController@dashboard')->name('template.dashboard');
 
-	/*configurations*/
-	Route::get('/theming', 'Admin\ThemingController@index')->name('backend.theming');
-	Route::get('/group', 'Admin\ConfigurationController@group')->name('backend.group');
-	Route::get('/user', 'Admin\ConfigurationController@user')->name('backend.user');
-	Route::get('/menu', 'Admin\ConfigurationController@menu')->name('backend.menu');
-	Route::get('/permission', 'Admin\ConfigurationController@permission')->name('backend.permission');
+		/*templates*/
+		Route::get('/template/form', 'Admin\TemplateController@form')->name('template.form');
+		Route::get('/template/form-collective', 'Admin\TemplateController@formCollective')->name('template.form_collective');
+		Route::get('/template/table', 'Admin\TemplateController@table')->name('template.table');
+
+		/*configurations*/
+		Route::get('/theming', 'Admin\ThemingController@index')->name('backend.theming');
+		Route::get('/group', 'Admin\ConfigurationController@group')->name('backend.group');
+		Route::get('/user', 'Admin\ConfigurationController@user')->name('backend.user');
+		Route::get('/menu', 'Admin\ConfigurationController@menu')->name('backend.menu');
+		Route::get('/permission', 'Admin\ConfigurationController@permission')->name('backend.permission');
+		Route::get('/profile', 'Admin\ConfigurationController@profile')->name('backend.profile');
+		Route::get('/download/{metafile}', 'Admin\AdminSevenController@download')->name('backend.download');
+	});
 
 });

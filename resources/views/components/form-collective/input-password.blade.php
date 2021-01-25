@@ -8,6 +8,7 @@
             <input 
                 type="password" 
                 id="password_{{ $id }}"
+                wire:ignore
                 class="form-control {!! (isset($attributes['class'])) ? $attributes['class'] : '' !!}"
                 @foreach($attributes as $key => $value)
                 {{ $key }} = "{{ $value }}"

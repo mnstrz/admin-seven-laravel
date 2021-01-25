@@ -26,4 +26,12 @@ class Group extends Model
     {
         return $this->hasMany('App\Models\GroupPermission', 'group', 'id');
     }
+
+    /**
+     * has menu
+     */
+    public function hasMenu()
+    {
+        return $this->hasMany('App\Models\GroupMenu', 'group', 'id');
+    }
 }

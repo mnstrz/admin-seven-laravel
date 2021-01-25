@@ -10,6 +10,8 @@ class BackendUser extends Component
 {
 	use AdminSevenCrud;
 
+	public $avatar_files = [];
+
 	public function prepare()
 	{
 		$this->setModel('User');
@@ -21,17 +23,13 @@ class BackendUser extends Component
 		$this->addJavascript($javascript);
 	}
 
-	public function setLists()
-	{
-		$this->listRelationTo('thisGroup');
-		$this->listField('username','Username');
-		$this->listField('email','Email');
-		$this->listField('this_group.name','Group');
-	}
-
 	public function setForm()
 	{
 		$this->formWidth(6);
+		$this->formField('avatar','Avatar')
+						->formType('image')
+						->formFileDir('public/avatar')
+						->formImageSetting(["aspectRatio" => "1/1"]);
 		$this->formField('username','Username')
 						->formValidate('required|unique:users,username');
 		$this->formField('email','Email')
@@ -45,17 +43,12 @@ class BackendUser extends Component
 						->formValidate('required|min:6|confirmed')
 						->formValue("");
 		$this->formField('password_confirmation','Ulangi Password')
-						->formType('password');
+						->formType('password')
+						->formIgnore();
 	}
 
-	public function formStoring()
-	{
-		$user = new $this->model;
-		$user->username = $this->form['username'];
-		$user->email = $this->form['email'];
-		$user->group = $this->form['group'];
-		$user->password = Hash::make($this->form['password']);
-		$user->save();
+	public function beforeStore(){
+		
 	}
 
 	public function validateUpdate()
@@ -63,26 +56,13 @@ class BackendUser extends Component
 		$this->validate([
 			'form_edit.username' => 'required|unique:users,username,'.$this->selected_primary_key,
 			'form_edit.email' => 'required|unique:users,email,'.$this->selected_primary_key,
-			'form_edit.group' => 'required',
-			'form_edit.password' => 'sometimes|min:6|confirmed'
+			'form_edit.group' => 'required'
 		]);
-	}
-
-	public function formUpdating()
-	{
-		$user = $this->model::where($this->primary_key,$this->selected_primary_key)->first();
-
-		if(!$user){
-			abort('404');
-		}
-
-		$user->username = $this->form_edit['username'];
-		$user->email = $this->form_edit['email'];
-		$user->group = $this->form_edit['group'];
 		if($this->form_edit['password']){
-			$user->password = Hash::make($this->form_edit['password']);
+			$this->validate([
+				'form_edit.password' => 'min:6|confirmed'
+			]);
 		}
-		$user->save();
 	}
 
 	public function setFilter()
@@ -94,13 +74,23 @@ class BackendUser extends Component
 			 ->filterRelation('Models.Group','id','name');
 	}
 
+	public function setLists()
+	{
+		$this->listRelationTo('thisGroup');
+		$this->listField('avatar','Avatar')->listImage();
+		$this->listField('username','Username');
+		$this->listField('email','Email');
+		$this->listField('this_group.name','Group')->listBadge();
+	}
+
 	public function setShow()
 	{
 		$this->showWidth(6);
 		$this->showRelationTo('thisGroup');
+		$this->showField('avatar','Avatar')->showAsImage();
 		$this->showField('username','Username');
 		$this->showField('email','Email');
-		$this->showField('thisGroup.name','Group')->showFormat('label');
+		$this->showField('thisGroup.name','Group')->showAsBadge();
 	}
 
 	public function label($value)

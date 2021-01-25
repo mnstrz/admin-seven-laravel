@@ -4,18 +4,37 @@
 		$title = $title.' '.$modul_name;
 	@endphp
 	<x-card :title="$title">
+		@php
+			//dd($form_add,$fileee);
+			$render_form = ($form_mode == "add") ? $form_add_setting : $form_edit_setting;
+			$state = ($form_mode == "add") ? "form_add." : "form_edit.";
+			$state_var = ($form_mode == "add") ? $form_add : $form_edit;
+		@endphp
 		<form wire:submit.prevent="save">
-			@php
-				$render_form = ($form_mode == "add") ? $form_add_setting : $form_edit_setting;
-				$state = ($form_mode == "add") ? "form." : "form_edit."
-			@endphp
 			@foreach($render_form as $key => $form)
+				<!-- set attributes					-->
 		    	@php
 		    		if($form['type'] == 'selectCheckbox'){
 		    			$attributes = [
 	                        "name" => $form['field'],
 	                        "placeholder" => $form['placeholder'],
 	                        "wire:model" => $state.$form['field']
+	                    ];
+		    		}else if($form['type'] == 'uploadFile'){
+		    			$model_name = ($form['multifile']) ? $form['field']."_files" : "form_file.".$form['field'];
+		    			$attributes = [
+	                        "name" => $form['field'],
+	                        "placeholder" => $form['placeholder'],
+	                        "wire:model.lazy" => $model_name
+	                    ];
+		    			if($form['multifile']){
+		    				$attributes['multiple'] = 'multiple';
+		    			}
+		    		}else if($form['type'] == 'inputPassword'){
+		    			$attributes = [
+	                        "name" => $form['field'],
+	                        "placeholder" => $form['placeholder'],
+	                        "wire:model.lazy" => $state.$form['field']
 	                    ];
 		    		}else{
 			    		$attributes = [
@@ -24,16 +43,19 @@
 	                        "wire:model.lazy" => $state.$form['field']
 	                    ];
 		    		}
+		    		/**/
                     if($form['event']){
                     	foreach($form['event'] as $event){
                     		$e = explode("=",$event);
                     		$attributes[$e[0]] = $e[1];
                     	}
                     }
+                    /**/
                     if($form['value']){
                     	$attributes['value'] = $form['value'];
                     }
-		    	@endphp	
+                    /**/
+		    @endphp
 				@switch($form['type'])
 				    @case('selectOption')
 				    @case('selectRadio')
@@ -43,7 +65,7 @@
 		                    $attributes,
 		                    $form['relation'],
 		                    $form['info']
-		                    ) 
+		                    )
       					!!}
 				    @break
 				    @case('selectCheckbox')
@@ -54,7 +76,7 @@
 		                    $form['relation'],
 		                    [],
 		                    $form['info']
-		                    ) 
+		                    )
       					!!}
 				    @break
 				    @case('uploadFile')
@@ -64,7 +86,22 @@
 		                    $attributes,
 		                    $form['value'],
 		                    $form['info']
-		                    ) 
+		                    )
+      					!!}
+      					@if($form['multifile'])
+      						{{ $this->this_filename($form['field']."_files") }}
+      					@else
+      						{{ $this->this_filename("form_file.".$form['field']) }}
+      					@endif
+				    @break
+				    @case('uploadImage')
+				        {!! Form::{$form['type']}(
+				        	$form['column'],
+                     	 	$form['label'],
+		                    $attributes,
+		                    $form['image_setting'],
+		                    ($form['path']) ? \Storage::url($form['path']) : null
+		                    )
       					!!}
 				    @break
 				    @default
@@ -73,20 +110,23 @@
                      	 	$form['label'],
 		                    $attributes,
 		                    $form['info']
-		                    ) 
+		                    )
       					!!}
 				@endswitch
 				@error($state.$form['field']) <label class="badge badge-danger"> {{ $message }}</label>@enderror
-				
+
 			@endforeach
 		</form>
 		<div class="d-flex flex-row justify-content-between mt-3">
 			<div>
-				<button class="btn btn-sm bg-black" wire:click="lists()">
+				<button class="btn btn-sm bg-black" wire:click="cancelForm()">
 					<span>Cancel</span>
 				</button>
 			</div>
-			<div>
+			<div wire:loading wire:target="save">
+				<label class="badge {{ \AdminSeven::accentSkin() }}">Loading ...</label>
+			</div>
+			<div wire:loading.remove wire:target="save">
 				<button class="btn btn-sm btn-danger" wire:click="resetForm()">
 					<span>Reset</span>
 				</button>

@@ -9,9 +9,10 @@ trait AdminSevenForm{
 	public $form_add_setting = [];
 	public $form_edit_setting = [];
 	public $form_mode = "add";
-	public $form = [];
+	public $form_add = [];
 	public $form_edit = [];
 	public $form_width = 12;
+	public $form_file = [];
 
 	/**
 	 * set form add
@@ -54,7 +55,7 @@ trait AdminSevenForm{
 	protected function sameAsFormAddSetting()
 	{
 		$this->form_edit_setting = $this->form_add_setting;
-		$this->form_edit = $this->form;
+		$this->form_edit = $this->form_add;
 	}
 
 	/**
@@ -108,6 +109,7 @@ trait AdminSevenForm{
 	 */
 	public function edit($id)
 	{
+		$this->selected_primary_key = null;
 		$this->beforeEdit();
 		if(!$this->can_edit){
 			abort('403');
@@ -153,22 +155,32 @@ trait AdminSevenForm{
 	protected function getDataEdit()
 	{
 		$data = $this->model::where($this->primary_key,$this->selected_primary_key)->first()->toArray();
+		if(!$data){
+			abort('404');
+		}
 		$form_edit = $this->form_edit;
-
+		foreach($form_edit as $field => $row){
+			$this->form_edit[$field] = null;
+		}
 		foreach($data as $field => $row)
 		{
 			if(array_key_exists($field,$form_edit)){
-
-				foreach($this->form_edit_setting as $form){
-
+				foreach($this->form_edit_setting as $key => $form){
 					if($form['field'] == $field){
-						if($form['value'] === NULL){
-							$form_edit[$field] = $row;
-						}else{
-							$form_edit[$field] = $form['value'];
+						if($form['type'] != 'inputPassword'){
+							if($form['value'] === NULL){
+								$form_edit[$field] = $row;
+							}else{
+								$form_edit[$field] = $form['value'];
+							}
+						}
+						if($form['type'] == 'uploadImage'){
+							$this->form_edit_setting[$key]['path'] = $row;
+						}
+						if($form['type'] == 'uploadFile'){
+							$this->form_edit_setting[$key]['path'] = $row;
 						}
 					}
-
 				}
 			}
 		}
@@ -184,12 +196,12 @@ trait AdminSevenForm{
 	public function resetForm()
 	{
 
-		$form = $this->form;
+		$form = $this->form_add;
 		foreach($form as $key => $value)
 		{
 			$form[$key] = null;
 		}
-		$this->form = $form;
+		$this->form_add = $form;
 
 		$form_edit = $this->form_edit;
 		foreach($form_edit as $key => $value)
@@ -222,8 +234,8 @@ trait AdminSevenForm{
 	 */
 	protected function storeForm()
 	{
-		$this->beforeStore();
 		$this->validateStore();
+		$this->beforeStore();
 
 		try {
 			$this->formStoring();
@@ -243,14 +255,14 @@ trait AdminSevenForm{
 	 */
 	protected function updateForm()
 	{
-		$this->beforeUpdate();
 		$this->validateUpdate();
-		
+		$this->beforeUpdate();
 
 		try {
 			$this->formUpdating();
 			$this->afterUpdate();
 			$this->finishUpdate();
+			$this->selected_primary_key = null;
 			$this->showMessage('success','Data updated successfully!');
 		} catch (Exception $e) {
 			$this->showMessage('danger','Failed to update data! '. $e);
@@ -265,11 +277,11 @@ trait AdminSevenForm{
 	 */
 	public function validateStore()
 	{
-		foreach($this->form as $key => $value){
+		foreach($this->form_add as $key => $value){
 			$form_setting = $this->getFormAddSetting($key);
 			if($form_setting['validate']){
 				$this->validate([
-					'form.'.$key => $form_setting['validate']
+					'form_add.'.$key => $form_setting['validate']
 				]);
 			}
 		}
@@ -389,10 +401,209 @@ trait AdminSevenForm{
 	{
 		$data = new $this->model;
 
-		foreach($this->form as $field => $value){
-			$data->{$field} = $value;
+		foreach($this->form_add as $field => $value){
+			$form_setting = $this->getFormAddSetting($field);
+			if($form_setting['type'] == "uploadImage"){
+				if(is_array($this->form_add[$field])){
+					$this->uploadImage($field,$form_setting['upload_dir']);
+					$value = $this->form_add[$field];
+				}
+			}
+			if($form_setting['type'] == "uploadFile"){
+				if($form_setting['multifile']){
+					if(count($this->{$form_setting['field']."_files"}) > 0){
+						$this->uploadFile($field,$form_setting['upload_dir']);
+						$value = $this->form_add[$field];
+					}
+				}else{
+					if(isset($this->form_file[$field])){
+						if($this->form_file[$field]){
+							$this->uploadFile($field,$form_setting['upload_dir']);
+							$value = $this->form_add[$field];
+						}
+					}
+				}
+			}
+			if(!$form_setting['ignore']){
+				$data->{$field} = $value;
+			}
 		}
 		$data->save();
+	}
+
+	/**
+	 * uploading file
+	 *
+	 * @method uploadImage
+	 * @return void
+	 */
+	public function uploadImage($field,$upload_dir)
+	{
+		# get file extension
+		$extension = explode('/', $this->form_add[$field]['type']);
+		$extension = end($extension);
+
+		# get image
+		$image = $this->form_add[$field]['file'];
+		$image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
+
+		# set filename
+		$filename = uniqid();
+
+		# set path
+		$path_file = $upload_dir.'/'.$filename.".$extension";
+
+		# store into storage
+		\Storage::disk('local')->put($path_file, $image);
+
+		# set state to path
+		$this->form_add[$field] = $path_file;
+	}
+
+	/**
+	 * updating image file
+	 *
+	 * @method imageUpdate
+	 * @return void
+	 */
+	public function imageUpdate($field,$upload_dir,$existing=null)
+	{
+		# delete existing
+		if($existing){
+			if(file_exists(\Storage::path($existing))){
+				\Storage::delete($existing);
+			}
+		}
+
+		# get file extension
+		$type = explode('/', $this->form_edit[$field]['type']);
+		$type = end($type);
+
+		# get image
+		$image = $this->form_edit[$field]['file'];
+		$image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
+
+		# set filename
+		$filename = uniqid();
+
+		# set path
+		$path_file = $upload_dir.'/'.$filename.".$type";
+
+		# store into storage
+		\Storage::disk('local')->put($path_file, $image);
+
+		# set state to path
+		$this->form_edit[$field] = $path_file;
+	}
+
+	/**
+	 * uploading file
+	 *
+	 * @method uploadFile
+	 * @return void
+	 */
+	public function uploadFile($field,$upload_dir)
+	{
+		$form_setting = $this->getFormAddSetting($field);
+		if($form_setting['multifile']){
+			$path_files = [];
+			foreach($this->{$field.'_files'} as $file){
+				# get file
+				$extension = $file->getClientOriginalExtension();
+
+				# set filename
+				$filename = uniqid();
+
+				# set path
+				$path_file = $upload_dir.'/'.$filename.".$extension";
+
+				# store into storage
+				$file->storeAs($upload_dir, $filename.".$extension");
+				array_push($path_files, $path_file);
+			}
+			# set state to path
+			$this->form_add[$field] = json_encode($path_files);
+			# set file state to array
+			$this->{$field.'_files'} = [];
+		}else{
+			# get file
+			$file = $this->form_file[$field];
+			$extension = $file->getClientOriginalExtension();
+
+			# set filename
+			$filename = uniqid();
+
+			# set path
+			$path_file = $upload_dir.'/'.$filename.".$extension";
+
+			# store into storage
+			$file->storeAs($upload_dir, $filename.".$extension");
+
+			# set state to path
+			$this->form_add[$field] = $path_file;
+			# set file state to array
+			$this->form_file[$field] = [];
+		}
+	}
+
+	/**
+	 * uploading file
+	 *
+	 * @method fileUpdate
+	 * @return void
+	 */
+	public function fileUpdate($field,$upload_dir,$existing=null)
+	{
+		$form_setting = $this->getFormAddSetting($field);
+		if($form_setting['multifile']){
+			$path_files = $this->form_edit[$field];
+			$path_files = json_decode($path_files);
+			$path_files = ($path_files) ? (array) $path_files : [];
+			foreach($this->{$field.'_files'} as $file){
+				# get file
+				$extension = $file->getClientOriginalExtension();
+
+				# set filename
+				$filename = uniqid();
+
+				# set path
+				$path_file = $upload_dir.'/'.$filename.".$extension";
+
+				# store into storage
+				$file->storeAs($upload_dir, $filename.".$extension");
+				array_push($path_files, $path_file);
+			}
+			# set state to path
+			$this->form_edit[$field] = json_encode($path_files);
+			# set file state to array
+			$this->{$field.'_files'} = [];
+		}else{
+			# delete existing
+			if($existing){
+				if(file_exists(\Storage::path($existing))){
+					\Storage::delete($existing);
+				}
+			}
+
+			# get image
+			$file = $this->form_file[$field];
+			$extension = $file->getClientOriginalExtension();
+
+			# set filename
+			$filename = uniqid();
+
+			# set path
+			$path_file = $upload_dir.'/'.$filename.".$extension";
+
+			# store into storage
+			$file->storeAs($upload_dir, $filename.".$extension");
+			//\Storage::disk('local')->putFile($path_file, $file);
+
+			# set state to path
+			$this->form_edit[$field] = $path_file;
+			# set file state to array
+			$this->form_file[$field] = [];
+		}
 	}
 
 	/**
@@ -410,7 +621,31 @@ trait AdminSevenForm{
 		}
 
 		foreach($this->form_edit as $field => $value){
-			$data->{$field} = $value;
+			$form_edit_setting = $this->getFormEditSetting($field);
+			if($form_edit_setting['type'] == "uploadImage"){
+				if(is_array($value)){
+					$this->imageUpdate($field,$form_edit_setting['upload_dir'],$data->{$field});
+					$value = $this->form_edit[$field];
+				}
+			}
+			if($form_edit_setting['type'] == "uploadFile"){
+				if($form_edit_setting['multifile']){
+					if(count($this->{$form_edit_setting['field']."_files"}) > 0){
+						$this->fileUpdate($field,$form_edit_setting['upload_dir'],$data->{$field});
+						$value = $this->form_edit[$field];
+					}
+				}else{
+					if(isset($this->form_file[$field])){
+						if($this->form_file[$field]){
+							$this->fileUpdate($field,$form_edit_setting['upload_dir'],$data->{$field});
+							$value = $this->form_edit[$field];
+						}
+					}
+				}
+			}
+			if(!$form_edit_setting['ignore']){
+				$data->{$field} = $value;
+			}
 		}
 		$data->save();
 	}
@@ -462,19 +697,24 @@ trait AdminSevenForm{
 			"label" => $label_name,
 			"type" => "inputText",
 			"relation" => [],
-			"validate" => "required",
+			"validate" => "",
 			"column" => [3,9],
 			"info" => null,
 			"value" => null,
 			"placeholder" => $label_name,
 			"event" => [],
+			"upload_dir" => null,
+			"image_setting" => [],
+			"path" => null,
+			"ignore" => false,
+			"multifile" => false
 		];
 		array_push($form_add_setting, $new_form);
 		$this->form_add_setting = $form_add_setting;
 
-		$form = $this->form;
+		$form = $this->form_add;
 		$form[$field_name] = null;
-		$this->form = $form;
+		$this->form_add = $form;
 
 		return $this;
 	}
@@ -518,7 +758,11 @@ trait AdminSevenForm{
 		$form = $this->thisFormType($type);
 		$form_add_setting[$length-1]['type'] = $form;
 		if($type == 'checkbox'){
-			$this->form[$form_add_setting[$length-1]['field']] = [];
+			$this->form_add[$form_add_setting[$length-1]['field']] = [];
+		}
+		if($type == 'file'){
+			$name = $form_add_setting[$length-1]['field']."_files";
+			global $name;
 		}
 		$this->form_add_setting = $form_add_setting;
 
@@ -626,6 +870,84 @@ trait AdminSevenForm{
 	}
 
 	/**
+	 * set validate on form fields
+	 * @method formFileDir
+	 * @param string $validate
+	 * @return void
+	 */
+	protected function formFileDir($upload_dir)
+	{
+		$form_add_setting = $this->form_add_setting;
+		$length = count($form_add_setting);
+		$form_add_setting[$length-1]['upload_dir'] = $upload_dir;
+		$this->form_add_setting = $form_add_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set setting image on form fields
+	 * @method formImageSetting
+	 * @param string $setting image
+	 * @return void
+	 */
+	protected function formImageSetting($image_setting)
+	{
+		$form_add_setting = $this->form_add_setting;
+		$length = count($form_add_setting);
+		$form_add_setting[$length-1]['image_setting'] = $image_setting;
+		$this->form_add_setting = $form_add_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set path on form fields
+	 * @method filePath
+	 * @param string $path image
+	 * @return void
+	 */
+	protected function formPath($path)
+	{
+		$form_add_setting = $this->form_add_setting;
+		$length = count($form_add_setting);
+		$form_add_setting[$length-1]['path'] = $path;
+		$this->form_add_setting = $form_add_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set ignore on form fields
+	 * @method formIgnore
+	 * @return void
+	 */
+	protected function formIgnore()
+	{
+		$form_add_setting = $this->form_add_setting;
+		$length = count($form_add_setting);
+		$form_add_setting[$length-1]['ignore'] = true;
+		$this->form_add_setting = $form_add_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set multifile on form fields
+	 * @method formMultiplefile
+	 * @return void
+	 */
+	protected function formMultiplefile()
+	{
+		$form_add_setting = $this->form_add_setting;
+		$length = count($form_add_setting);
+		$form_add_setting[$length-1]['multifile'] = true;
+		$this->form_add_setting = $form_add_setting;
+
+		return $this;
+	}
+
+	/**
 	 * set form field
 	 * @method formEditField
 	 * @param string field_name
@@ -646,12 +968,17 @@ trait AdminSevenForm{
 			"label" => $label_name,
 			"type" => "inputText",
 			"relation" => [],
-			"validate" => "required",
+			"validate" => "",
 			"column" => [3,9],
 			"info" => null,
 			"value" => null,
 			"placeholder" => $label_name,
-			"event" => []
+			"event" => [],
+			"upload_dir" => null,
+			"image_setting" => [],
+			"path" => null,
+			"ignore" => false,
+			"multifile" => false
 		];
 		array_push($form_edit_setting, $new_form);
 		$this->form_edit_setting = $form_edit_setting;
@@ -809,6 +1136,104 @@ trait AdminSevenForm{
 		return $this;
 	}
 
+	/**
+	 * set event on form edit fields
+	 * @method formEditFileDir
+	 * @param string $upload_dir
+	 * @return void
+	 */
+	protected function formEditFileDir($upload_dir)
+	{
+		$form_edit_setting = $this->form_edit_setting;
+		$length = count($form_edit_setting);
+
+		$upload_dir = $form_edit_setting[$length-1]['upload_dir'];
+		array_push($upload_dir, $upload_dir);
+
+		$form_edit_setting[$length-1]['upload_dir'] = $upload_dir;
+		$this->form_edit_setting = $form_edit_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set edit setting image on form fields
+	 * @method formFile
+	 * @param string $setting image
+	 * @return void
+	 */
+	protected function formEditImageSetting($image_setting)
+	{
+		$form_edit_setting = $this->form_edit_setting;
+		$length = count($form_edit_setting);
+
+		$image_setting = $form_edit_setting[$length-1]['image_setting'];
+		array_push($image_setting, $image_setting);
+
+		$form_edit_setting[$length-1]['image_setting'] = $image_setting;
+		$this->form_edit_setting = $form_edit_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set path on form fields
+	 * @method filePath
+	 * @param string $path image
+	 * @return void
+	 */
+	protected function formEditPath($path)
+	{
+		$form_edit_setting = $this->form_edit_setting;
+		$length = count($form_edit_setting);
+
+		$path = $form_edit_setting[$length-1]['path'];
+		array_push($path, $path);
+
+		$form_edit_setting[$length-1]['path'] = $path;
+		$this->form_edit_setting = $form_edit_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set ignore to save on form fields
+	 * @method filePath
+	 * @return void
+	 */
+	protected function formEditIgnore()
+	{
+		$form_edit_setting = $this->form_edit_setting;
+		$length = count($form_edit_setting);
+
+		$ignore = $form_edit_setting[$length-1]['ignore'];
+		array_push($ignore, $ignore);
+
+		$form_edit_setting[$length-1]['ignore'] = true;
+		$this->form_edit_setting = $form_edit_setting;
+
+		return $this;
+	}
+
+	/**
+	 * set multiple file  on form fields
+	 * @method formEditMultiplefile
+	 * @return void
+	 */
+	protected function formEditMultiplefile()
+	{
+		$form_edit_setting = $this->form_edit_setting;
+		$length = count($form_edit_setting);
+
+		$multifile = $form_edit_setting[$length-1]['multifile'];
+		array_push($multifile, $multifile);
+
+		$form_edit_setting[$length-1]['multifile'] = true;
+		$this->form_edit_setting = $form_edit_setting;
+
+		return $this;
+	}
+
 	protected function thisFormType($type)
 	{
 		$form = '';
@@ -858,6 +1283,9 @@ trait AdminSevenForm{
 			case 'file':
 				$form = "uploadFile";
 				break;
+			case 'image':
+				$form = "uploadImage";
+				break;
 			case 'textarea':
 				$form = "inputTextarea";
 				break;
@@ -882,6 +1310,30 @@ trait AdminSevenForm{
 	public function formWidth($width)
 	{
 		$this->form_width = $width;
+	}
+
+	/**
+	 * cancel form
+	 * @method cancelForm
+	 */
+	public function cancelForm()
+	{
+		if($this->form_mode == 'add'){
+			foreach($this->form_add as $field => $value){
+				if(isset($this->{$field."_files"})){
+					$this->{$field."_files"} = [];
+				}
+			}
+		}
+		if($this->form_mode == 'edit'){
+			foreach($this->form_edit as $field => $value){
+				if(isset($this->{$field."_files"})){
+					$this->{$field."_files"} = [];
+				}
+			}
+		}
+		$this->form_file = [];
+		$this->lists();
 	}
 
 }

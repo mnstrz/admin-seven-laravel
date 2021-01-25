@@ -20,11 +20,16 @@
                 @foreach($attributes as $key => $value)
                   {{ $key }} = "{{ $value }}"
                 @endforeach
+                wire:ignore.self
             />
-            <label class="custom-file-label" for="upload_{{$id}}">Choose file</label>
+            @if(isset($attributes['multiple']))
+              <label class="custom-file-label" for="upload_{{$id}}">Add files</label>
+            @else
+              <label class="custom-file-label" for="upload_{{$id}}">Add file</label>
+            @endif
           </div>
           <div class="input-group-append">
-            <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}">Upload</span>
+            <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}"><i class="far fa-file"></i></span>
           </div>
         </div>
     	@isset($help)

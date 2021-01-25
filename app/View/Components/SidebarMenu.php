@@ -3,6 +3,8 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use App\Models\Menu;
+use App\Models\GroupMenu;
 
 class SidebarMenu extends Component
 {
@@ -15,7 +17,30 @@ class SidebarMenu extends Component
      */
     public function __construct()
     {
-        $this->getMenu();
+        //$this->getMenu();
+        $this->createMenu();
+    }
+
+    public function createMenu()
+    {
+        $user = \Auth::guard('admin')->user();
+        $group_menu = GroupMenu::join('menu','group_menu.menu','=','menu.id')
+                            ->where('group',$user->group)
+                            ->orderBy('menu.sort','asc')
+                            ->get();
+        $menu = [];
+        foreach($group_menu as $row){
+            $subs = [
+                "id" => $row->thisMenu->id,
+                "label" => $row->thisMenu->name,
+                "url" => url('backend/'.$row->thisMenu->url),
+                "icon" => $row->thisMenu->icon,
+                "parent" => $row->thisMenu->parent
+            ];
+            array_push($menu,$subs);
+        }
+        $treeMenu = \AdminSeven::createTreeList($menu);
+        $this->menu = $treeMenu;
     }
 
     public function getMenu()

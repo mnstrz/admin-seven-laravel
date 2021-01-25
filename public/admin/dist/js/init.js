@@ -210,3 +210,21 @@ $(document).on('click','.btn-password',function(e){
         $(this).html(`<i class="fa fa-eye-slash"></i>`);
     }
 })
+
+function showToast(message,variant){
+  if(variant == 'success'){
+    toastr.success(message)
+  }else if(variant == 'warning'){
+    toastr.warning(message)
+  }else if(variant == 'info'){
+    toastr.info(message)
+  }else if(variant == 'danger'){
+    toastr.danger(message)
+  }else if(variant == 'primary'){
+    toastr.primary(message)
+  }else if(variant == 'secondary'){
+    toastr.secondary(message)
+  }else{
+    toastr.error(message)
+  }
+}

@@ -49,7 +49,10 @@ trait AdminSevenShow{
 		$new_field = [
 			"field" => \Str::snake($field_name),
 			"label" => $label_name,
-			"format" => null
+			"format" => null,
+			"file" => false,
+			"image" => false,
+			"badge" => null
 		];
 		array_push($row_show, $new_field);
 		$this->row_show = $row_show;
@@ -148,6 +151,55 @@ trait AdminSevenShow{
 	}
 
 	/**
+	 * set show file of lists
+	 * @method showAsFile
+	 * @return void
+	 */
+	protected function showAsFile()
+	{
+		$fields = $this->row_show;
+		$length = count($fields);
+		$fields[$length-1]['file'] = true;
+		$this->row_show = $fields;
+
+		return $this;
+	}
+
+	/**
+	 * set show image of lists
+	 * @method showAsImage
+	 * @return void
+	 */
+	protected function showAsImage()
+	{
+		$fields = $this->row_show;
+		$length = count($fields);
+		$fields[$length-1]['image'] = true;
+		$this->row_show = $fields;
+
+		return $this;
+	}
+
+	/**
+	 * set show badge of lists
+	 * @method showAsBadge
+	 * @return void
+	 */
+	protected function showAsBadge($variant=null)
+	{
+		if(!$variant){
+			$variant = \AdminSeven::accentSkin();
+			$variant = str_replace('bg-','', $variant);
+		}
+		$fields = $this->row_show;
+		$length = count($fields);
+		$fields[$length-1]['badge'] = $variant;
+		$this->row_show = $fields;
+
+		return $this;
+	}
+
+	/**
 	 * set show width
 	 * @method showWidth
 	 * @param int $width
@@ -155,6 +207,39 @@ trait AdminSevenShow{
 	public function showWidth($width)
 	{
 		$this->show_width = $width;
+	}
+
+	public function deleteFile($key,$field){
+
+		$primary_key = $this->primary_key;
+		$selected_primary_key = $this->selected_primary_key;
+		$model = $this->model;
+
+		$data = $model::where($primary_key,$selected_primary_key)->first();
+		if(!$data){
+			abort('404');
+		}
+
+
+		$paths = $data->{$field};
+		$paths = (array) json_decode($paths);
+
+		if(is_array($paths)){
+			$path = $paths[$key];
+			if(file_exists(\Storage::path($path))){
+				\Storage::delete($path);
+			}
+			unset($paths[$key]);
+			$path = json_encode($paths);
+		}else{
+			if(file_exists(\Storage::path($path))){
+				\Storage::delete($path);
+			}
+			$path = null;
+		}
+		$data->{$field} = $path;
+		$data->save();
+		$this->showMessage('success','File has been deleted!');
 	}
 
 }

@@ -91,4 +91,24 @@ class ConfigurationController extends Controller
       ];
       return view('admin-seven',compact($response));
     }
+
+    /**
+     * @method profile
+     * @return void
+     */
+    public function profile()
+    {
+      $title = 'Profile '.$this->title;
+      $breadcrumb = [
+        'Configuration' => '#',
+        'Profile' => route('backend.profile')
+      ];
+      $livewire = "backend-profile";
+      $plugins = "formAdvance formEditor tableSimple";
+
+      $response = [
+        'title','breadcrumb','livewire','plugins'
+      ];
+      return view('admin-seven',compact($response));
+    }
 }

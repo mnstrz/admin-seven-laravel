@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class Navbar extends Component
 {
+    public $link_navbar = [];
     /**
      * Create a new component instance.
      *
@@ -13,7 +14,16 @@ class Navbar extends Component
      */
     public function __construct()
     {
-        //
+        $this->link_navbar = [
+            [
+                "name" => "Home",
+                "url" => url('backend')
+            ],
+            [
+                "name" => "Profile",
+                "url" => url('backend/profile')
+            ]
+        ];
     }
 
     /**

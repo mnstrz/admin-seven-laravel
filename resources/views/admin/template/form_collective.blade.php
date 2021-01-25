@@ -12,6 +12,7 @@
                       "Information"
                     ) 
       !!}
+      <label class="badge badge-danger"> Text Input is required</label>
       {!! Form::inputEmail(
                       [2,6],
                       "Email",

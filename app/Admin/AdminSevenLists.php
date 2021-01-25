@@ -90,7 +90,10 @@ trait AdminSevenLists{
 		$new_lists = [
 			"field" => \Str::snake($field_name),
 			"label" => $label_name,
-			"format" => ""
+			"format" => "",
+			"image" => false,
+			"file" => false,
+			"badge" => null
 		];
 		array_push($fields, $new_lists);
 		$this->lists_fields = $fields;
@@ -108,6 +111,55 @@ trait AdminSevenLists{
 		$fields = $this->lists_fields;
 		$length = count($fields);
 		$fields[$length-1]['format'] = $method;
+		$this->lists_fields = $fields;
+
+		return $this;
+	}
+
+	/**
+	 * set file of lists
+	 * @method listFile
+	 * @return void
+	 */
+	protected function listFile()
+	{
+		$fields = $this->lists_fields;
+		$length = count($fields);
+		$fields[$length-1]['file'] = true;
+		$this->lists_fields = $fields;
+
+		return $this;
+	}
+
+	/**
+	 * set image of lists
+	 * @method listImage
+	 * @return void
+	 */
+	protected function listImage()
+	{
+		$fields = $this->lists_fields;
+		$length = count($fields);
+		$fields[$length-1]['image'] = true;
+		$this->lists_fields = $fields;
+
+		return $this;
+	}
+
+	/**
+	 * set badge of lists
+	 * @method listBadge
+	 * @return void
+	 */
+	protected function listBadge($variant=null)
+	{
+		if(!$variant){
+			$variant = \AdminSeven::accentSkin();
+			$variant = str_replace('bg-','', $variant);
+		}
+		$fields = $this->lists_fields;
+		$length = count($fields);
+		$fields[$length-1]['badge'] = $variant;
 		$this->lists_fields = $fields;
 
 		return $this;
@@ -492,7 +544,7 @@ trait AdminSevenLists{
 	 * after delete
 	 * @method afterDelete
 	 */
-	public function afterDelete($script)
+	public function afterDelete($script=null)
 	{
 		if($script){
 			eval($script);

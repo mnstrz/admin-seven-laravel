@@ -10,10 +10,12 @@ use App\Admin\AdminSevenPaginate;
 use App\Admin\AdminSevenForm;
 use App\Admin\AdminServenMessage;
 use App\Admin\AdminSevenMessage;
+use App\Admin\AdminSevenFilename;
+use App\Admin\AdminSevenFormat;
 
 trait AdminSevenCrud{
 
-	use AdminSevenLists,AdminSevenPaginate,AdminSevenFilters,AdminSevenForm,AdminSevenShow,AdminSevenMessage,WithFileUploads;
+	use AdminSevenLists,AdminSevenPaginate,AdminSevenFilters,AdminSevenForm,AdminSevenShow,AdminSevenMessage,WithFileUploads,AdminSevenFilename,AdminSevenFormat;
 
 	public $view = "list";
 	public $model = 'App\\Models\\FakeTable';
@@ -22,10 +24,15 @@ trait AdminSevenCrud{
 	public $additionalElement = [];
 	public $javascript = '';
 	public $modul_name = '';
+	public $loading = false;
+	public $url_permission = true;
 
 	public function mount()
 	{
 		$this->prepare();
+		if($this->url_permission){
+			\AdminSeven::urlPermission();
+		}
 		$this->setRelation();
 		$this->setFilter();
 		$this->setLists();
@@ -57,7 +64,7 @@ trait AdminSevenCrud{
 	 */
 	protected function prepare()
 	{
-		
+
 	}
 
 	/**
@@ -79,7 +86,7 @@ trait AdminSevenCrud{
 	 */
 	protected function setRelation()
 	{
-		
+
 	}
 
 	/**
@@ -89,7 +96,7 @@ trait AdminSevenCrud{
 	 */
 	protected function setView()
 	{
-		
+
 	}
 
 	/**

@@ -17,6 +17,17 @@
 
     @livewireStyles
     @stack('css')
+
+    @if(isset($plugins,$js))
+      <x-js :plugins="$plugins" :js="$js" />
+    @elseif(isset($plugins))
+      <x-js :plugins="$plugins" />
+    @elseif(isset($js))
+      <x-js :js="$js" />
+    @else
+      <x-js />
+    @endif
+    
 </head>
 <body class="hold-transition {{ (empty(AdminSeven::theme("is_top_nav"))) ? 'sidebar-mini' : 'sidebar-collapse' }} layout-fixed {{ config('adminSeven.accent.'.AdminSeven::accentSkin()) }} {{ AdminSeven::theme("is_body_small") }} {{ AdminSeven::theme("is_sidebar_default_collapse") }} {{ AdminSeven::theme("is_fixed_navbar") }} {{ AdminSeven::theme("is_fixed_footer") }} {{ AdminSeven::theme("is_boxed") }} {{ AdminSeven::theme("is_sidebar_fixed") }} {{ AdminSeven::theme("is_top_nav") }}">
   <div class="wrapper">
@@ -50,6 +61,7 @@
       <section class="content">
         <div class="{{ (empty(AdminSeven::theme("is_top_nav"))) ? 'container-fluid' : 'container' }}">
           @yield('content')
+          @stack('insert-content')
         </div>
       </section>
 
@@ -59,7 +71,7 @@
 
   </div>
   
-    @if(isset($plugins,$js))
+    {{-- @if(isset($plugins,$js))
       <x-js :plugins="$plugins" :js="$js" />
     @elseif(isset($plugins))
       <x-js :plugins="$plugins" />
@@ -67,7 +79,7 @@
       <x-js :js="$js" />
     @else
       <x-js />
-    @endif
+    @endif --}}
 
   @livewireScripts
 	@stack('js')

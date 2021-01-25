@@ -18,9 +18,18 @@
 
 		        				@if(count($field_nested) == 1)
 								<td>
+									@php
+										$val = $result_show[$row['field']];
+									@endphp
 									@if($row['format'])
-										{!! $this->{$row['format']}($result_show[$row['field']]) !!}
-									@else
+										{!! $this->{$row['format']}($val) !!}
+									@elseif($row['file'])
+		            					{!! $this->format_showFile($val,$row['field']) !!}
+			            			@elseif($row['image'])
+			            				{!! $this->format_showImage($val) !!}
+			            			@elseif($row['badge'])
+			            				{!! $this->format_Label($val,$row['badge'],$selected_primary_key) !!}
+			            			@else
 										{{ $result_show[$row['field']] }}
 									@endif
 								</td>
@@ -32,11 +41,16 @@
 		            				$val = $val[$sub_field];
 		            			}	
 		            			@endphp
-
 								<td>
 									@if($row['format'])
 										{!! $this->{$row['format']}($val) !!}
-									@else
+									@elseif($row['file'])
+		            					{!! $this->format_showFile($val,$row['field']) !!}
+			            			@elseif($row['image'])
+			            				{!! $this->format_showImage($val) !!}
+			            			@elseif($row['badge'])
+			            				{!! $this->format_Label($val,$row['badge'],$selected_primary_key) !!}
+			            			@else
 										{{ $val }}
 									@endif
 								</td>

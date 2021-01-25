@@ -59,7 +59,8 @@ class Css extends Component
         'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css',
         'plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css',
         'plugins/bs-stepper/css/bs-stepper.min.css',
-        'plugins/dropzone/min/dropzone.min.css'
+        'plugins/dropzone/min/dropzone.min.css',
+        'plugins/cropperjs/dist/cropper.css'
     ];
 
     protected $formEditor = [

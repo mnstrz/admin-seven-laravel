@@ -51,6 +51,12 @@
 		            			{{-- get format --}}
 		            			@if($row['format'])
 		            				{!! $this->{$row['format']}($value[$row['field']],$value[$primary_key]) !!}
+		            			@elseif($row['file'])
+		            				{!! $this->format_showFileList($value[$row['field']],$row['field'],$value[$primary_key]) !!}
+		            			@elseif($row['image'])
+		            				{!! $this->format_showImageList($value[$row['field']],$value[$primary_key]) !!}
+		            			@elseif($row['badge'])
+		            				{!! $this->format_Label($value[$row['field']],$row['badge'],$value[$primary_key]) !!}
 		            			@else
 		            				{{ $value[$row['field']] }}
 		            			@endif
@@ -61,12 +67,18 @@
 		            			$val = $value;
 		            			foreach ($field_nested as $key => $sub_field) {
 		            				$val = $val[$sub_field];
-		            			}	
+		            			}
 		            		@endphp
 		            		<td>
 		            			{{-- get format --}}
 		            			@if($row['format'])
 		            				{!! $this->{$row['format']}($val,$value[$primary_key]) !!}
+		            			@elseif($row['file'])
+		            				{!! $this->format_showFileList($val,$value[$primary_key]) !!}
+		            			@elseif($row['image'])
+		            				{!! $this->format_showImageList($val,$value[$primary_key]) !!}
+		            			@elseif($row['badge'])
+		            				{!! $this->format_Label($val,$row['badge'],$value[$primary_key]) !!}
 		            			@else
 		            				{{ $val }}
 		            			@endif
@@ -152,23 +164,7 @@
   	let x = 0;
 	window.addEventListener('show-message', event => {
 		toastr.remove()
-		let message = event.detail.message.message
-		let variant = event.detail.message.variant
-		if(variant == 'success'){
-			toastr.success(message)
-		}else if(variant == 'warning'){
-			toastr.warning(message)
-		}else if(variant == 'info'){
-			toastr.info(message)
-		}else if(variant == 'danger'){
-			toastr.danger(message)
-		}else if(variant == 'primary'){
-			toastr.primary(message)
-		}else if(variant == 'secondary'){
-			toastr.secondary(message)
-		}else{
-			toastr.error(message)
-		}
+		showToast(event.detail.message.message,event.detail.message.variant)
 		$('[data-tooltip="true"]').tooltip()
 	})
     window.addEventListener('close-message', event => {

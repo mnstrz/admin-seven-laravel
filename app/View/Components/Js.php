@@ -90,7 +90,8 @@ class Js extends Component
         'plugins/bs-stepper/js/bs-stepper.min.js',
         'plugins/dropzone/min/dropzone.min.js',
         'plugins/jquery-validation/jquery.validate.min.js',
-        'plugins/jquery-validation/additional-methods.min.js'
+        'plugins/jquery-validation/additional-methods.min.js',
+        'plugins/cropperjs/dist/cropper.js'
     ];
 
     protected $formEditor = [

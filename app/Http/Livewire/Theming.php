@@ -30,7 +30,7 @@ class Theming extends Component
 
     public function render()
     {
-        return view('livewire.theming');
+        return view('livewire.backend.theming');
     }
 
     public function refreshData()

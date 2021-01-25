@@ -20,4 +20,12 @@ class Menu extends Model
     {
         return $this->belongsTo('App\Models\Menu', 'parent', 'id');
     }
+
+    /**
+     * group
+     */
+    public function hasGroup()
+    {
+        return $this->hasMany('App\Models\GroupMenu', 'menu', 'id');
+    }
 }

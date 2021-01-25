@@ -33,6 +33,7 @@ class BackendPermission extends Component
 	public function setShow()
 	{
 		$this->showField('name','Permission Name');
+		$this->showField('url','URL');
 		$this->showField('hasGroup','Group')
 				->showFormat('getGroup');
 	}
@@ -40,6 +41,7 @@ class BackendPermission extends Component
 	public function setLists()
 	{
 		$this->listField('name','Permission Name');
+		$this->listField('url','URL');
 		$this->listField('hasGroup','Group')
 						->listFormat('getGroup');
 	}
@@ -57,6 +59,7 @@ class BackendPermission extends Component
 	public function setForm()
 	{
 		$this->formField('name','Permission Name');
+		$this->formField('url','URL');
 		$this->formField('group','Group')
 						->formType('checkbox')
 						->formRelation('Models.Group','id','name')
@@ -66,10 +69,11 @@ class BackendPermission extends Component
 	public function formStoring()
 	{
 		$data = new $this->model;
-		$data->name = $this->form['name'];
+		$data->name = $this->form_add['name'];
+		$data->url = $this->form_add['url'];
 		$data->save();
 
-		foreach($this->form['group'] as $group){
+		foreach($this->form_add['group'] as $group){
 			$group_permission = new GroupPermission;
 			$group_permission->permission = $data->id;
 			$group_permission->group = $group;
@@ -95,6 +99,7 @@ class BackendPermission extends Component
 			abort('404');
 		}
 		$data->name = $this->form_edit['name'];
+		$data->url = $this->form_edit['url'];
 		$data->save();
 
 		$group_permission = GroupPermission::where('permission',$data->id)->delete();
@@ -106,6 +111,20 @@ class BackendPermission extends Component
 		}
 	}
 
+	public function validateStore()
+	{
+		$this->validate([
+			'form.name' => 'required|unique:permission,name'
+		]);
+	}
+
+	public function validateUpdate()
+	{
+		$this->validate([
+			'form_edit.name' => 'required|unique:permission,name,'.$this->selected_primary_key
+		]);
+	}
+
 	public function afterDelete()
 	{
 		GroupPermission::where('permission',$this->selected_primary_key)->delete();
@@ -113,7 +132,7 @@ class BackendPermission extends Component
 
 	public function updatedForm()
 	{
-		$this->form['group'] = $this->form['group'];
+		$this->form_add['group'] = $this->form_add['group'];
 	}
 
 	public function updatedFormEdit()
