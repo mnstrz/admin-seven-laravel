@@ -93,7 +93,7 @@ class BackendMenu extends Component
             $icon = $row['icon'];
             $group = '';
             foreach ($row['group'] as $val) {
-                $group .= '<label class="badge badge-primary mr-2">'.$val.'</label>';
+                $group .= '<label class="badge badge-primary '.AdminSeven::accentSkin().' mr-2">'.$val.'</label>';
             }
             $after = (isset($items[$key+1])) ? $items[$key+1]['id'] : null ;
             $before = (isset($items[$key-1])) ? $items[$key-1]['id'] : null ;

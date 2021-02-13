@@ -4,7 +4,7 @@
 <div class="form-group row">
     <label class="col-12 col-lg-{{ $column[0] }}">{{ $label }}</label>
     <div class="col-12 col-lg-{{ $column[1] }}">
-        <textarea id="{{$id}}" class="{!! (isset($attributes['class'])) ? $attributes['class'] : '' !!}"
+        <textarea {{ (!isset($attributes['id'])) ? "id=$id" : '' }} class="text-code {!! (isset($attributes['class'])) ? $attributes['class'] : '' !!}"
             @foreach($attributes as $key => $value)
                {{ $key }} = "{{ $value }}"
             @endforeach

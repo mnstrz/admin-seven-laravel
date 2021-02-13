@@ -38,12 +38,21 @@ Route::group([ 'prefix' => "backend"], function(){
 
 		/*configurations*/
 		Route::get('/theming', 'Admin\ThemingController@index')->name('backend.theming');
+		Route::get('/configuration', 'Admin\ConfigurationController@config')->name('backend.config');
 		Route::get('/group', 'Admin\ConfigurationController@group')->name('backend.group');
 		Route::get('/user', 'Admin\ConfigurationController@user')->name('backend.user');
 		Route::get('/menu', 'Admin\ConfigurationController@menu')->name('backend.menu');
 		Route::get('/permission', 'Admin\ConfigurationController@permission')->name('backend.permission');
 		Route::get('/profile', 'Admin\ConfigurationController@profile')->name('backend.profile');
 		Route::get('/download/{metafile}', 'Admin\AdminSevenController@download')->name('backend.download');
+
+		/*creator*/
+		Route::get('/creator', 'Admin\AdminSevenController@creator')->name('backend.creator');
+		Route::get('/creator/new', 'Admin\AdminSevenController@newCreator')->name('backend.new.creator');
+		Route::get('/creator/edit/{id}', 'Admin\AdminSevenController@editCreator')->name('backend.edit.creator');
+
+		/*show creator*/
+		Route::get('{crud_slug}/creator', 'Admin\AdminSevenController@makeCreator')->name('backend.creator.make');
 	});
 
 });

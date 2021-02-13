@@ -12,6 +12,25 @@ class ConfigurationController extends Controller
   		'Configuration' => '#'
   	];
 
+    /**
+     * @method config
+     * @return void
+     */
+    public function config()
+    {
+      $title = $this->title;
+      $breadcrumb = [
+        'Configuration' => route('backend.config')
+      ];
+      $livewire = "backend-config";
+      $plugins = "formAdvance formEditor tableSimple";
+
+      $response = [
+        'title','breadcrumb','livewire','plugins'
+      ];
+      return view('admin-seven',compact($response));
+    }
+
 	  /**
      * @method group
      * @return void
@@ -58,6 +77,7 @@ class ConfigurationController extends Controller
      */
     public function menu()
     {
+      \AdminSeven::backendGate('authorize','menu');
       $title = 'Menu '.$this->title;
       $breadcrumb = [
         'Configuration' => '#',

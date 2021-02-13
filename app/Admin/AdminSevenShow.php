@@ -52,7 +52,8 @@ trait AdminSevenShow{
 			"format" => null,
 			"file" => false,
 			"image" => false,
-			"badge" => null
+			"badge" => null,
+			"options" => []
 		];
 		array_push($row_show, $new_field);
 		$this->row_show = $row_show;
@@ -151,6 +152,21 @@ trait AdminSevenShow{
 	}
 
 	/**
+	 * set show format of lists
+	 * @method showOptions
+	 * @return void
+	 */
+	protected function showOptions($options)
+	{
+		$fields = $this->row_show;
+		$length = count($fields);
+		$fields[$length-1]['options'] = $options;
+		$this->row_show = $fields;
+
+		return $this;
+	}
+
+	/**
 	 * set show file of lists
 	 * @method showAsFile
 	 * @return void
@@ -197,6 +213,34 @@ trait AdminSevenShow{
 		$this->row_show = $fields;
 
 		return $this;
+	}
+
+	/**
+	 * set show option of lists
+	 * @method showOptionResult
+	 * @return void
+	 */
+	public function showOptionResult($field,$value){
+		$options = $this->getShowSetting($field)['options'];
+		foreach($options as $key => $option) {
+			if(is_array($option)){
+				if($value == $option[0]){
+					return $option[1];
+				}
+			}else{
+				if($value == $option){
+					return $option;
+				}
+			}
+		}
+	}
+
+	public function getShowSetting($field){
+		foreach ($this->row as $key => $row) {
+			if($row['field'] == $field){
+				return $row;
+			}
+		}
 	}
 
 	/**

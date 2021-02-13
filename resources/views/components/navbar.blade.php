@@ -4,8 +4,10 @@
     @if( AdminSeven::theme("is_top_nav") != null)
     <div class="container">
       <a href="{{ url("/") }}" class="adminSeven_brand {{ config('adminSeven.brand.'.AdminSeven::brandSkin()) }} {{ AdminSeven::theme("is_brand_small") }} p-2" style="min-width: 150px;">
-        <img src="{{ asset('admin/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="">AdminLTE 3</span>
+        <img src="{{ \Storage::url(AdminSeven::appConfig()->logo) }}" alt="Admin Seven" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="">
+          {{ AdminSeven::appConfig()->app_name }}
+        </span>
       </a>
 
       <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +44,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
+          <span class="badge badge-warning navbar-badge">0</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-item dropdown-header">15 Notifications</span>
@@ -81,8 +83,8 @@
   <aside class="main-sidebar elevation-4 {{ config('adminSeven.sidebar.'.AdminSeven::sidebarSkin()) }} {{ AdminSeven::theme("is_sidebar_disable_expand") }}" id="adminSeven_sidebar">
     <!-- Brand Logo -->
     <a href="index3.html" class="adminSeven_brand brand-link {{ config('adminSeven.brand.'.AdminSeven::brandSkin()) }} {{ AdminSeven::theme("is_brand_small") }}">
-      <img src="{{ asset('admin/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <img src="{{ \Storage::url(AdminSeven::appConfig()->favicon) }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">{{ AdminSeven::appConfig()->app_name }}</span>
     </a>
 
     <!-- Sidebar -->
@@ -90,10 +92,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('admin/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ \Storage::url(AdminSeven::UserInfo()->avatar) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{ AdminSeven::UserInfo()->username }}</a>
         </div>
       </div>
 

@@ -2,10 +2,17 @@
 
 namespace App\Admin;
 use App\Models\Theme;
+use App\Models\Configuration;
 
 use Illuminate\Support\Facades\DB;
 
 class AdminSevenHelper{
+
+		public static function appConfig()
+		{
+			$config = Configuration::find(1);
+			return $config;
+		}
 
 		public static function navbarSkin()
 		{
@@ -60,6 +67,20 @@ class AdminSevenHelper{
 				}
 			}else{
 				return 'bg-primary';
+			}
+		}
+
+		public static function color()
+		{
+			if(Theme::first())
+			{
+				if(Theme::first()->accent_skin){
+					return str_replace('bg-','',Theme::first()->accent_skin);
+				}else{
+					return 'primary';
+				}
+			}else{
+				return 'primary';
 			}
 		}
 
@@ -305,9 +326,17 @@ class AdminSevenHelper{
 
     }
 
-	public static function backendGate($function,$name){
+	/*
+	 * \AdminSeven::helper('authorize','config-user') will return 403 response if not authorize 
+	 * \AdminSeven::helper('allows','config-user') will return boolean
+	 */
+	public static function backendGate($function,$name=null){
 		$user = \Auth::guard('admin')->user();
-	  \Gate::forUser($user)->$function($name);
+		if($name !== null){
+	    	return \Gate::forUser($user)->$function($name);
+		}else{
+	    	return \Gate::forUser($user)->$function();
+		}
 	}
 
 	public static function urlPermission(){
@@ -363,5 +392,9 @@ class AdminSevenHelper{
 					break;
 			}
 		}
+	}
+
+	public static function UserInfo(){
+		return \Auth::guard('admin')->user();
 	}
 }

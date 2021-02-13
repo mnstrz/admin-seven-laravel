@@ -1,4 +1,4 @@
-<section class="col-lg-9">
+<section class="col {{($with_filter) ? 'col-lg-9' : ''}}">
 	@php
 		$title ='List '.$modul_name;
 	@endphp
@@ -48,17 +48,27 @@
 
 	        				@if(count($field_nested) == 1)
 		            		<td>
+		            			@php
+		            				$val = $value[$row['field']];
+		            				if(count($row['options']) > 0){
+		            					if(isset($row['options'][$val])){
+		            						$val = $row['options'][$val];
+		            					}else{
+		            						$val = "<i>Option not found</i>";
+		            					}
+		            				}
+		            			@endphp
 		            			{{-- get format --}}
 		            			@if($row['format'])
-		            				{!! $this->{$row['format']}($value[$row['field']],$value[$primary_key]) !!}
+		            				{!! $this->{$row['format']}($val,$value[$primary_key]) !!}
 		            			@elseif($row['file'])
-		            				{!! $this->format_showFileList($value[$row['field']],$row['field'],$value[$primary_key]) !!}
+		            				{!! $this->format_showFileList($val,$row['field'],$value[$primary_key]) !!}
 		            			@elseif($row['image'])
-		            				{!! $this->format_showImageList($value[$row['field']],$value[$primary_key]) !!}
+		            				{!! $this->format_showImageList($val,$value[$primary_key]) !!}
 		            			@elseif($row['badge'])
-		            				{!! $this->format_Label($value[$row['field']],$row['badge'],$value[$primary_key]) !!}
+		            				{!! $this->format_Label($val,$row['badge'],$value[$primary_key]) !!}
 		            			@else
-		            				{{ $value[$row['field']] }}
+		            				{!! $val !!}
 		            			@endif
 		            		</td>
 		            		@else
@@ -68,6 +78,13 @@
 		            			foreach ($field_nested as $key => $sub_field) {
 		            				$val = $val[$sub_field];
 		            			}
+		            			if(count($row['options']) > 0){
+	            					if(isset($row['options'][$val])){
+	            						$val = $row['options'][$val];
+	            					}else{
+	            						$val = "<i>Option not found</i>";
+	            					}
+	            				}
 		            		@endphp
 		            		<td>
 		            			{{-- get format --}}

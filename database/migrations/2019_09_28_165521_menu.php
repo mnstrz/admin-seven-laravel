@@ -18,7 +18,7 @@ class Menu extends Migration
             $table->increments('id',11);
             $table->integer('parent')->nullable();
             $table->string('name');
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->string('icon');
             $table->integer('sort');
             $table->timestamps();

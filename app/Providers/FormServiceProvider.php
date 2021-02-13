@@ -94,7 +94,7 @@ class FormServiceProvider extends ServiceProvider
          * @param array $options
          * @param string help
          */
-        \Form::component('selectOption', 'components.form-collective.select', ['column','label','attributes' => [],'options' => [], 'help']);
+        \Form::component('selectOption', 'components.form-collective.select', ['column','label','attributes' => [],'options' => [], 'help','disable_select2']);
 
         /**
          * @method inputNumber
@@ -113,6 +113,15 @@ class FormServiceProvider extends ServiceProvider
          * @param string help
          */
         \Form::component('inputTextAppend', 'components.form-collective.input-text-append', ['column','label','attributes' => [], 'help']);
+
+        /**
+         * @method inputTextAppend
+         * @param array $column
+         * @param string $label
+         * @param array $attributes
+         * @param string help
+         */
+        \Form::component('inputButtonAppend', 'components.form-collective.input-button-append', ['column','label','attributes' => [], 'help']);
 
         /**
          * @method inputColor

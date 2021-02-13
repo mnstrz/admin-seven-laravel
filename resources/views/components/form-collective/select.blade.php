@@ -1,13 +1,14 @@
 @php
-    $color = (isset($attributes['color'])) ? $attributes['color'] : 'primary';
+    $color = (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color();
     $class = (isset($attributes['class'])) ? $attributes['class'] : '';
     $default = (isset($attributes['value'])) ? $attributes['value'] : '';
+    $enable_select2 = ($disable_select2 == true) ? 'select2' : 'custom-select'
 @endphp
 <div class="form-group row">
     <label class="col-12 col-lg-{{ $column[0] }}">{{ $label }}</label>
     <div class="col-12 col-lg-{{ $column[1] }} {{ (isset($color)) ? 'select2-'.$color : '' }}">
         <select 
-            class="form-control select2 {!! ($class) ? $class : '' !!} {{ (isset($color)) ? "select2-".$color : '' }}" 
+            class="form-control {{ $enable_select2 }} {!! ($class) ? $class : '' !!} {{ (isset($color)) ? "select2-".$color : '' }}" 
             width="100%"
             @isset($color)
                 data-dropdown-css-class="select2-{{$color}}"

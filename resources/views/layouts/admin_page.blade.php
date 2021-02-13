@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{ (isset($title)) ? $title.' - ' : '' }} {{ config('app.name') }}</title>
+	<title>{{ (isset($title)) ? $title.' - ' : '' }} {{ (AdminSeven::appConfig()->app_name) ? AdminSeven::appConfig()->app_name : config('app.name') }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ \Storage::url(AdminSeven::appConfig()->favicon) }}">
 
     @if(isset($plugins,$css))
       <x-css :plugins="$plugins" :css="$css" />

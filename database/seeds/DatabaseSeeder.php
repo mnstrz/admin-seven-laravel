@@ -18,7 +18,10 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             GroupMenuSeeder::class,
             GroupPermissionSeeder::class,
-            FakeTableSeeder::class
+            FakeTableSeeder::class,
+            ThemeSeeder::class,
+            AdminSevenThemeSeeder::class,
+            ConfigurationSeeder::class
         ]);
     }
 }

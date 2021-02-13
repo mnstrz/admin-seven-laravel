@@ -4,7 +4,7 @@
         <div class="input-group">
             @isset($attributes['before'])
                 <div class="input-group-prepend">
-                    <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}">
+                    <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!}">
                         {!! $attributes['before'] !!}
                     </span>
                 </div>
@@ -18,7 +18,7 @@
         	/>
             @isset($attributes['after'])
                 <div class="input-group-append">
-                    <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}">
+                    <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!}">
                         {!! $attributes['after'] !!}
                     </span>
                 </div>

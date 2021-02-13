@@ -8,6 +8,7 @@ trait AdminSevenFilters{
 
 	public $filter_fields = [];
 	public $filters = [];
+	public $with_filter = true;
 
 	/**
 	 * set filter
@@ -31,6 +32,16 @@ trait AdminSevenFilters{
 				}
 			}
 		}
+	}
+
+	/**
+	 * disable filter
+	 * @method disableFilter
+	 * @return void
+	 */
+	protected function disableFilter()
+	{
+		$this->with_filter = false;
 	}
 
 	/**
@@ -66,6 +77,7 @@ trait AdminSevenFilters{
 			"label" => $label,
 			"type" => "inputText",
 			"relation" => [],
+			"options" => [],
 			"operator" => $operator
 		];
 		array_push($filter_fields, $new_filter);
@@ -94,6 +106,21 @@ trait AdminSevenFilters{
 	}
 
 	/**
+	 * set filter options
+	 * @method filterType
+	 * @return void
+	 */
+	protected function filterOptions($options)
+	{
+		$filter_fields = $this->filter_fields;
+		$length = count($filter_fields);
+		$filter_fields[$length-1]['options'] = $options;
+		$this->filter_fields = $filter_fields;
+
+		return $this;
+	}
+
+	/**
 	 * set relation on filter fields
 	 * @method filterRelation
 	 * @param string $relation
@@ -101,7 +128,7 @@ trait AdminSevenFilters{
 	 * @param string $fields_name
 	 * @return void
 	 */
-	protected function filterRelation($relation,$foreign_key,$fields_name)
+	protected function filterRelation($relation,$foreign_key,$fields_name,$key_form=null)
 	{
 		$filter_fields = $this->filter_fields;
 		$length = count($filter_fields);
@@ -113,8 +140,11 @@ trait AdminSevenFilters{
 		foreach($get_relation as $key => $value){
 			$options_relation[$value->{$foreign_key}] = $value->{$fields_name};
 		}
-
-		$filter_fields[$length-1]['relation'] = $options_relation;
+		if($key_form !== null){
+			$filter_fields[$key_form]['relation'] = $options_relation;
+		}else{
+			$filter_fields[$length-1]['relation'] = $options_relation;
+		}
 		$this->filter_fields = $filter_fields;
 
 		return $this;

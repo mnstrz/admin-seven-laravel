@@ -6,7 +6,7 @@
     <div class="col-12 col-lg-{{ $column[1] }}">
         <div class="input-group date" id="date_{{ $id }}" data-target-input="nearest">
             <div class="input-group-prepend">
-                <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}">
+                <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!}">
                     <i class="fa fa-clock"></i>
                 </span>
             </div>

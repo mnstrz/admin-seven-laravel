@@ -10,7 +10,7 @@
               @php
                   $text = explode("|", $text);
               @endphp
-              <div class="icheck-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!} d-inline">
+              <div class="icheck-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!} d-inline">
                 <input 
                     type="radio"
                     id="checkbox_{{$id}}_{{$val}}" 

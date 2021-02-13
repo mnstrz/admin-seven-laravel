@@ -93,7 +93,8 @@ trait AdminSevenLists{
 			"format" => "",
 			"image" => false,
 			"file" => false,
-			"badge" => null
+			"badge" => null,
+			"options" => []
 		];
 		array_push($fields, $new_lists);
 		$this->lists_fields = $fields;
@@ -166,6 +167,44 @@ trait AdminSevenLists{
 	}
 
 	/**
+	 * set options of lists
+	 * @method listOptions
+	 * @return void
+	 */
+	protected function listOptions($options)
+	{
+		$fields = $this->lists_fields;
+		$length = count($fields);
+		$fields[$length-1]['options'] = $options;
+		$this->lists_fields = $fields;
+
+		return $this;
+	}
+
+	public function listOptionResult($field,$value){
+		$options = $this->getListSetting($field)['options'];
+		foreach($options as $key => $option) {
+			if(is_array($option)){
+				if($value == $option[0]){
+					return $option[1];
+				}
+			}else{
+				if($value == $option){
+					return $option;
+				}
+			}
+		}
+	}
+
+	public function getListSetting($field){
+		foreach ($this->lists_fields as $key => $row) {
+			if($row['field'] == $field){
+				return $row;
+			}
+		}
+	}
+
+	/**
 	 * get lists data
 	 * @return void
 	 */
@@ -177,7 +216,9 @@ trait AdminSevenLists{
 
 			$data = $this->model::query();
 			foreach($this->lists_relations as $relation){
-				$data = $data->with($relation);
+				if($relation != null || $relation != ""){
+					$data = $data->with($relation);
+				}
 			}
 			foreach($this->filters as $key => $row){
 				if(is_array($row)){
@@ -255,7 +296,7 @@ trait AdminSevenLists{
 	protected function operator($name){
 		foreach($this->filter_fields as $row){
 			if($row['field'] == $name){
-				return $row['operator'];
+				return ($row['operator']) ? $row['operator'] : "=";
 			}
 		}
 	}

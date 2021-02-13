@@ -129,6 +129,20 @@
                       "Information"
                     ) 
       !!}
+      {!! Form::inputButtonAppend(
+                      [2,3],
+                      "Button Append",
+                      [
+                        "name" => "text",
+                        "placeholder" => "Text Append",
+                        "color" => "purple",
+                        "value" => "2000",
+                        "before" => "<button type='submit' class='btn btn-sm btn-primary'><i class='fa fa-search'></i></button>",
+                        "after" => "<button type='submit' class='btn btn-sm btn-info'><i class='fa fa-upload'></i></button>"
+                      ],
+                      "Information"
+                    ) 
+      !!}
       {!! Form::inputColor(
                       [2,4],
                       "Color",

@@ -4,9 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{ config('app.name') }} | Login</title>
+  <title>{{ (AdminSeven::appConfig()->app_name) ? AdminSeven::appConfig()->app_name : config('app.name') }} | Login</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="{{ \Storage::url(AdminSeven::appConfig()->favicon) }}">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('admin/plugins/fontawesome-free/css/all.min.css') }}">
@@ -22,7 +23,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="{{ route('backend.login') }}">{{ config('app.name') }}</a>
+    <a href="{{ route('backend.login') }}">{{ (AdminSeven::appConfig()->app_name) ? AdminSeven::appConfig()->app_name : config('app.name') }}</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">

@@ -14,7 +14,7 @@
                 @endforeach
             />
             <div class="input-group-append">
-                <button class="btn btn-outline-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}" type="button" data-target="#date_{{ $id }}" data-toggle="datetimepicker">
+                <button class="btn btn-outline-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!}" type="button" data-target="#date_{{ $id }}" data-toggle="datetimepicker">
                     <i class="fa fa-clock"></i>
                 </button>
             </div>

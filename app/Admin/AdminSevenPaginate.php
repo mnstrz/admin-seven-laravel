@@ -105,6 +105,7 @@ trait AdminSevenPaginate{
 	public function changePerPage($perpage)
 	{
 		$this->per_page = $perpage;
+		$this->page = 1;
 		$this->reloadPage();
 	}
 

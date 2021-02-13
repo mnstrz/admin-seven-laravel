@@ -15,7 +15,7 @@
                 @endforeach
             />
             <div class="input-group-append">
-                <button class="btn btn-outline-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!} btn-password" type="button" data-id="password_{{ $id }}">
+                <button class="btn btn-outline-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!} btn-password" type="button" data-id="password_{{ $id }}">
                     <i class="fa fa-eye-slash"></i>
                 </button>
             </div>

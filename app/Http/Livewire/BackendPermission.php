@@ -62,8 +62,7 @@ class BackendPermission extends Component
 		$this->formField('url','URL');
 		$this->formField('group','Group')
 						->formType('checkbox')
-						->formRelation('Models.Group','id','name')
-						->formValidate("");
+						->formRelation('Models.Group','id','name');
 	}
 
 	public function formStoring()
@@ -114,7 +113,7 @@ class BackendPermission extends Component
 	public function validateStore()
 	{
 		$this->validate([
-			'form.name' => 'required|unique:permission,name'
+			'form_add.name' => 'required|unique:permission,name'
 		]);
 	}
 

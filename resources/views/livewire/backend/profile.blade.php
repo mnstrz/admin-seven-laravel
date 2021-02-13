@@ -27,23 +27,18 @@
 				</div>
     			@else
     			<form wire:submit.prevent="save">
-    				@if($avatar)
-    				<div class="col-8 ml-auto">
-    					<img src="{{$avatar}}" class="img-fluid">
-    				</div>
-    				@endif
 				    {!! Form::uploadImage(
 	                      [4,8],
 	                      "Avatar",
 	                      [
 	                        "name" => "avatar",
 	                        "color" => "info",
-	                        "wire:model" => "avatar"
+	                        "wire:model" => "new_avatar"
 	                      ],
 	                      [
 	                      	"aspectRatio" => "1/1"
 	                      ],
-	                      $avatar_path
+	                      ""
 	                    ) 
 				    !!}
 				    {{ $this->this_filename('avatar') }}

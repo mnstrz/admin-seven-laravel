@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('username');
             $table->string('email')->unique();
             $table->string('password');
+            $table->longText('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('group', 'group_ibfk_1')->references('id')->on('group')->onUpdate('CASCADE')->onDelete('CASCADE');

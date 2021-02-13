@@ -7,7 +7,7 @@
         <div class="input-group">
           @if(!empty($path))
             <div class="input-group-prepend">
-                <a href="{{ $path }}" class="btn btn-sm btn-outline-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!} px-3" type="button">
+                <a href="{{ $path }}" class="btn btn-sm btn-outline-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!} px-3" type="button">
                     <i class="fa fa-download"></i>
                 </a>
             </div>
@@ -29,7 +29,7 @@
             @endif
           </div>
           <div class="input-group-append">
-            <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}"><i class="far fa-file"></i></span>
+            <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!}"><i class="far fa-file"></i></span>
           </div>
         </div>
     	@isset($help)

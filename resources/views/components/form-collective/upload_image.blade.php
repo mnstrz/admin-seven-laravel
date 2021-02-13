@@ -1,14 +1,10 @@
 @php
-  $id = rand(1,999999);
-  $name = (isset($attributes['name'])) ? "image" : null;
+  $id = (isset($attributes['name'])) ? $attributes['name'] : rand(1,999999);
 @endphp
 <div class="form-group row">
     <label class="col-12 col-lg-{{ $column[0] }}">{{ $label }}</label>
     <div class="col-12 col-lg-{{ $column[1] }}">
         <div class="mb-2" id="preview_image_{{$id}}" wire:ignore wire:key="{{ (isset($attributes['wire:model'])) ? $attributes['wire:model'] : null }}">
-          @if($path)
-            <img src="{{ $path }}" class="img-fluid">
-          @endif
         </div>
         <div class="input-group">
           {{-- @if(!empty($path))
@@ -28,11 +24,12 @@
                 data-image="cropped_image_{{$id}}"
                 data-text_blob="upload_croped_{{$id}}"
                 data-preview_image="preview_image_{{$id}}"
+                data-livewire="{!! (isset($attributes['wire:model.lazy'])) ? $attributes['wire:model.lazy'] : '' !!}"
             />
             <label class="custom-file-label" for="upload_{{$id}}">Choose image</label>
           </div>
           <div class="input-group-append">
-            <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : 'primary' !!}">
+            <span class="input-group-text bg-{!! (isset($attributes['color'])) ? $attributes['color'] : \AdminSeven::color() !!}">
               <i class="far fa-image"></i>
             </span>
           </div>
@@ -69,7 +66,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" id="crop" class="btn btn-primary">Crop</button>
+            <button type="button" id="crop" class="btn btn-primary {{\AdminSeven::accentSkin()}}">Crop</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
       </div>
@@ -77,17 +74,22 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function(e){
-     var $modal = $('#modal_crop_{{$id}}');
-     let image = document.getElementById('cropped_image_{{$id}}')
-     var cropper, text_blob, preview_image
+     var $modal, image, cropper, text_blob, preview_image, livewire, upload_text_blob
+
+     var path = "{{ $path }}"
+     if(path){
+        let id = preview_image_{{ $id }};
+        $(preview_image_{{ $id }}).html(`<img src="${path}" class="img-fluid">`)
+     }
 
      $(document).on('change','.upload_image',function(e){
         var files = e.target.files;
 
         $modal = $('#'+$(this).data('modal'));
         image = document.getElementById(''+$(this).data('image'))
-        text_blob = $(this).data('text_blob')
         preview_image = $(this).data('preview_image')
+        text_blob = $(this).data('text_blob')
+        livewire = $(this).data('livewire')
 
         var done = function(url){
           image.src = url;
@@ -120,27 +122,26 @@
      })
 
      $(document).on('click','#crop',function(e){
-        let canvas = cropper.getCroppedCanvas().toDataURL();
-        let is_livewire = "{{ (isset($attributes['wire:model'])) ? $attributes['wire:model'] : null }}"
-        if(!is_livewire){
-          is_livewire = "{{ (isset($attributes['wire:model.lazy'])) ? $attributes['wire:model.lazy'] : null }}"
-        }
-        if(is_livewire){
-          let that = @this
-          cropper.getCroppedCanvas().toBlob((blob) => {
-            let data = {
-              "file" : canvas,
-              "type" : blob.type
-            }
-            that.set(is_livewire,data)
-          })
-        }
+        if(cropper.getCroppedCanvas()){
+          let canvas = cropper.getCroppedCanvas().toDataURL();
+          let is_livewire = (livewire != '') ? livewire : null
+          if(is_livewire){
+            let that = @this
+            cropper.getCroppedCanvas().toBlob((blob) => {
+              let data = {
+                "file" : canvas,
+                "type" : blob.type
+              }
+              that.set(is_livewire,data)
+            })
+          }
 
-        html = '<img src="' + canvas + '" class="img-fluid"/>';
-        $("#"+text_blob).val(canvas);
-        $("#"+preview_image).html(html);
+          html = '<img src="' + canvas + '" class="img-fluid"/>';
+          $("#"+text_blob).val(canvas);
+          $("#"+preview_image).html(html);
 
-        $modal.modal('hide');
+          $modal.modal('hide');
+        }
      })
   })
 </script>

@@ -60,6 +60,10 @@ trait AdminSevenFormat{
 	public function format_Label($value,$variant)
 	{
 		$badge = "";
+		if($variant == 'theme'){
+			$variant = \AdminSeven::accentSkin();
+			$variant = str_replace('bg-','', $variant);
+		}
 		if(is_array($value)){
 			foreach($value as $val){
 				$badge .="<label class='badge bg-$variant mr-1'>$val</label>";

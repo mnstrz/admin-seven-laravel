@@ -22,6 +22,7 @@ class BackendProfile extends Component
 	public $password_confirmation = null;
 	public $current_password = null;
 	public $password_match = true;
+	public $new_avatar = null;
 
 	public function mount(){
 		$this->getData();
@@ -34,6 +35,7 @@ class BackendProfile extends Component
 		$this->username = $user->username;
 		$this->email = $user->email;
 		$this->avatar = null;
+		$this->new_avatar = null;
 		$this->avatar_path = ($user->avatar) ? \Storage::url($user->avatar) : '';
 		$this->password = null;
 		$this->current_password = null;
@@ -56,17 +58,9 @@ class BackendProfile extends Component
 
 	public function save()
 	{
-		\Validator::extend('is_image',function($attribute, $value, $params, $validator) {
-		    $image = base64_decode($value);
-		    $f = finfo_open();
-		    $result = finfo_buffer($f, $image, FILEINFO_MIME_TYPE);
-		    return $result == 'image/png' || 'image/jpeg' || 'image/jpg';
-		});
-
 		$this->validate([
 			'username' => 'required|unique:users,username,'.$this->id_user,
-			'email' => 'required|unique:users,email,'.$this->id_user,
-			'avatar' => 'sometimes|is_image'
+			'email' => 'required|unique:users,email,'.$this->id_user
 		]);
 		
 		$user = User::where('id',$this->id_user)->first();
@@ -94,10 +88,25 @@ class BackendProfile extends Component
 		}
 
 		# avatar
-		if(!is_string($this->avatar)){
-        	$this->uploadAvatar($this->avatar,$user);
-        	$filename = md5($user->id);
-	        $user->avatar = $this->avatar->storeAs('public/avatar',$filename.".".$this->avatar->extension());
+		if($this->new_avatar){
+        	$this->deleteAvatar($this->avatar,$user);
+        	# get file extension
+			$extension = explode('/', $this->new_avatar['type']);
+			$extension = end($extension);
+
+			# get image
+			$image = $this->new_avatar['file'];
+			$image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
+
+			# set filename
+			$filename = uniqid();
+
+			# set path
+			$path_file = 'public/avatar/'.$filename.".$extension";
+
+			# store into storage
+			\Storage::disk('local')->put($path_file, $image);
+			$user->avatar = $path_file;
         }
 
 		$user->username = $this->username;
@@ -112,7 +121,7 @@ class BackendProfile extends Component
 		$this->getData();
 	}
 
-	public function uploadAvatar($avatar,$user)
+	public function deleteAvatar($avatar,$user)
 	{
 		if(!is_string($avatar)){
 			if(file_exists(\Storage::path($user->avatar))){

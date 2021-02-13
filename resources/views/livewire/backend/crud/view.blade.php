@@ -1,11 +1,13 @@
 <div class="row">
 
   @if($view == "list")
-	<section class="col-lg-3">
-		<x-card :title="'Filter'">
-			{!! $this->renderFilter() !!}
-		</x-card>
-	</section>
+   @if($with_filter)
+  	<section class="col-lg-3">
+  		<x-card :title="'Filter'">
+  			{!! $this->renderFilter() !!}
+  		</x-card>
+  	</section>
+    @endif
   	@include('livewire.backend.crud.lists')
   @elseif($view == "form")
 	  @include('livewire.backend.crud.form')

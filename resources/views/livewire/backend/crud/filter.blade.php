@@ -9,9 +9,10 @@
                         "value" => null,
                         "livewire" => true,
                         "wire:model.lazy" => 'filters.'.$row['field'],
-                        "setData" => 'filters.'.$row['field']
+                        "setData" => 'filters.'.$row['field'],
+                        "autocomplete" => "off"
                       ],
-                      $row['relation']
+                      (count($row['options']) > 0) ? $row['options'] : $row['relation']
                     ) 
     !!}
 	@elseif($row['type'] == "selectRadio")
@@ -49,7 +50,8 @@
 									"placeholder" => $row['label'],
 									"value" => null,
 									"wire:model.lazy" => 'filters.'.$row['field'],
-									"key" => $key
+									"key" => $key,
+                  "autocomplete" => "off"
 								]
 		 					) 
 	!!}

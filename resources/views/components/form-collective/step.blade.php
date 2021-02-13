@@ -16,8 +16,8 @@
         {{ $slot }}
         @if($buttons)
             <div class="d-flex flex-row justify-content-between">
-                 <button class="btn btn-primary btn-stepper-previous" data-stepper="previous">Previous</button>
-                 <button class="btn btn-primary btn-stepper-next" data-stepper="next">Next</button>
+                 <button class="btn btn-primary {{ \AdminSeven::accentSkin() }}btn-stepper-previous" data-stepper="previous">Previous</button>
+                 <button class="btn btn-primary {{ \AdminSeven::accentSkin() }}btn-stepper-next" data-stepper="next">Next</button>
             </div>
         @endif
     </div>

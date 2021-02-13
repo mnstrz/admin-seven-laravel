@@ -158,7 +158,7 @@ trait AdminSevenForm{
 		if(!$data){
 			abort('404');
 		}
-		$form_edit = $this->form_edit;
+		$form_edit = ($this->form_edit) ? $this->form_edit : $this->form_add;
 		foreach($form_edit as $field => $row){
 			$this->form_edit[$field] = null;
 		}
@@ -697,7 +697,8 @@ trait AdminSevenForm{
 			"label" => $label_name,
 			"type" => "inputText",
 			"relation" => [],
-			"validate" => "",
+			"options" => [],
+			"validate" => null,
 			"column" => [3,9],
 			"info" => null,
 			"value" => null,
@@ -727,7 +728,7 @@ trait AdminSevenForm{
 	 * @param string $fields_name
 	 * @return void
 	 */
-	protected function formRelation($relation,$foreign_key,$fields_name)
+	protected function formRelation($relation,$foreign_key,$fields_name,$key_form=null)
 	{
 		$form_add_setting = $this->form_add_setting;
 		$length = count($form_add_setting);
@@ -739,8 +740,11 @@ trait AdminSevenForm{
 		foreach($get_relation as $key => $value){
 			$options_relation[$value->{$foreign_key}] = $value->{$fields_name};
 		}
-
-		$form_add_setting[$length-1]['relation'] = $options_relation;
+		if($key_form !== null){
+			$form_add_setting[$key_form]['relation'] = $options_relation;
+		}else{
+			$form_add_setting[$length-1]['relation'] = $options_relation;
+		}
 		$this->form_add_setting = $form_add_setting;
 
 		return $this;
@@ -948,6 +952,22 @@ trait AdminSevenForm{
 	}
 
 	/**
+	 * set options on form fields
+	 * @method formOptions
+	 * @param string $value
+	 * @return void
+	 */
+	protected function formOptions($value)
+	{
+		$form_add_setting = $this->form_add_setting;
+		$length = count($form_add_setting);
+		$form_add_setting[$length-1]['options'] = $value;
+		$this->form_add_setting = $form_add_setting;
+
+		return $this;
+	}
+
+	/**
 	 * set form field
 	 * @method formEditField
 	 * @param string field_name
@@ -968,7 +988,8 @@ trait AdminSevenForm{
 			"label" => $label_name,
 			"type" => "inputText",
 			"relation" => [],
-			"validate" => "",
+			"options" => [],
+			"validate" => null,
 			"column" => [3,9],
 			"info" => null,
 			"value" => null,
@@ -998,7 +1019,7 @@ trait AdminSevenForm{
 	 * @param string $fields_name
 	 * @return void
 	 */
-	protected function formEditRelation($relation,$foreign_key,$fields_name)
+	protected function formEditRelation($relation,$foreign_key,$fields_name,$key_form=null)
 	{
 		$form_edit_setting = $this->form_edit_setting;
 		$length = count($form_edit_setting);
@@ -1010,8 +1031,11 @@ trait AdminSevenForm{
 		foreach($get_relation as $key => $value){
 			$options_relation[$value->{$foreign_key}] = $value->{$fields_name};
 		}
-
-		$form_edit_setting[$length-1]['relation'] = $options_relation;
+		if($key_form !== null){
+			$form_edit_setting[$key_form]['relation'] = $options_relation;
+		}else{
+			$form_edit_setting[$length-1]['relation'] = $options_relation;
+		}
 		$this->form_edit_setting = $form_edit_setting;
 
 		return $this;
@@ -1142,15 +1166,12 @@ trait AdminSevenForm{
 	 * @param string $upload_dir
 	 * @return void
 	 */
-	protected function formEditFileDir($upload_dir)
+	protected function formEditFileDir($new_upload_dir)
 	{
 		$form_edit_setting = $this->form_edit_setting;
 		$length = count($form_edit_setting);
 
-		$upload_dir = $form_edit_setting[$length-1]['upload_dir'];
-		array_push($upload_dir, $upload_dir);
-
-		$form_edit_setting[$length-1]['upload_dir'] = $upload_dir;
+		$form_edit_setting[$length-1]['upload_dir'] = $new_upload_dir;
 		$this->form_edit_setting = $form_edit_setting;
 
 		return $this;
@@ -1162,15 +1183,12 @@ trait AdminSevenForm{
 	 * @param string $setting image
 	 * @return void
 	 */
-	protected function formEditImageSetting($image_setting)
+	protected function formEditImageSetting($new_image_setting)
 	{
 		$form_edit_setting = $this->form_edit_setting;
 		$length = count($form_edit_setting);
-
-		$image_setting = $form_edit_setting[$length-1]['image_setting'];
-		array_push($image_setting, $image_setting);
-
-		$form_edit_setting[$length-1]['image_setting'] = $image_setting;
+		
+		$form_edit_setting[$length-1]['image_setting'] = $new_image_setting;
 		$this->form_edit_setting = $form_edit_setting;
 
 		return $this;
@@ -1234,6 +1252,22 @@ trait AdminSevenForm{
 		return $this;
 	}
 
+	/**
+	 * set options on form edit fields
+	 * @method formEditOptions
+	 * @param string $options
+	 * @return void
+	 */
+	protected function formEditOptions($options)
+	{
+		$form_edit_setting = $this->form_edit_setting;
+		$length = count($form_edit_setting);
+		$form_edit_setting[$length-1]['options'] = $options;
+		$this->form_edit_setting = $form_edit_setting;
+
+		return $this;
+	}
+
 	protected function thisFormType($type)
 	{
 		$form = '';
@@ -1285,9 +1319,6 @@ trait AdminSevenForm{
 				break;
 			case 'image':
 				$form = "uploadImage";
-				break;
-			case 'textarea':
-				$form = "inputTextarea";
 				break;
 			case 'texteditor':
 				$form = "inputTextEditor";

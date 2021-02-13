@@ -58,12 +58,22 @@
 		    @endphp
 				@switch($form['type'])
 				    @case('selectOption')
+				    	{!! Form::{$form['type']}(
+				        	$form['column'],
+                     	 	$form['label'],
+		                    $attributes,
+		                    (count($form['options']) > 0) ? $form['options'] : $form['relation'],
+		                    $form['info'],
+		                    false
+		                    )
+      					!!}
+      				@break
 				    @case('selectRadio')
 				        {!! Form::{$form['type']}(
 				        	$form['column'],
                      	 	$form['label'],
 		                    $attributes,
-		                    $form['relation'],
+		                    (count($form['options']) > 0) ? $form['options'] : $form['relation'],
 		                    $form['info']
 		                    )
       					!!}
@@ -73,7 +83,7 @@
 				        	$form['column'],
                      	 	$form['label'],
 		                    $attributes,
-		                    $form['relation'],
+		                    (count($form['options']) > 0) ? $form['options'] : $form['relation'],
 		                    [],
 		                    $form['info']
 		                    )
