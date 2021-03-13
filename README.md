@@ -43,4 +43,4 @@ Run in console :
 
 ### Documentation
 
-Check documentation at [Admin Seven Documentation]('http://admin-seven.monsterzgroup.com/')
+Check documentation at http://admin-seven.monsterzgroup.com
