@@ -123,6 +123,13 @@ class GroupMenuSeeder extends Seeder
                     "menu": 22,
                     "created_at": "2021-01-01 00:00:00",
                     "updated_at": "2021-01-01 00:00:00"
+                  },
+                  {
+                    "id": 17,
+                    "group": 1,
+                    "menu": 23,
+                    "created_at": "2021-01-01 00:00:00",
+                    "updated_at": "2021-01-01 00:00:00"
                   }
                 ]';
         $data = json_decode($json,true);

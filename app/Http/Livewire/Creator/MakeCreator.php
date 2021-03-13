@@ -27,13 +27,13 @@ class MakeCreator extends Component
 		$this->attributes = $attributes;
 
 		# general settings
-		$this->can_edit = $this->attributes['general']['can_edit'];
-		$this->can_delete = $this->attributes['general']['can_delete'];
-		$this->can_add = $this->attributes['general']['can_add'];
-		$this->can_show = $this->attributes['general']['can_show'];
-		$this->form_width = $this->attributes['general']['form_width'];
-		$this->show_width = $this->attributes['general']['show_width'];
-		$this->url_permission = $this->attributes['general']['url_permission'];
+		$this->can_edit = (isset($this->attributes['general']['can_edit'])) ? $this->attributes['general']['can_edit'] : true;
+		$this->can_delete = (isset($this->attributes['general']['can_delete'])) ? $this->attributes['general']['can_delete'] : true;
+		$this->can_add = (isset($this->attributes['general']['can_add'])) ? $this->attributes['general']['can_add'] : true;
+		$this->can_show = (isset($this->attributes['general']['can_show'])) ? $this->attributes['general']['can_show'] : true;
+		$this->form_width = (isset($this->attributes['general']['form_width'])) ? $this->attributes['general']['form_width'] : 12;
+		$this->show_width = (isset($this->attributes['general']['show_width'])) ? $this->attributes['general']['show_width'] : 12;
+		$this->url_permission = (isset($this->attributes['general']['url_permission'])) ? $this->attributes['general']['url_permission'] : true;
 		$this->javascript = $this->attributes['general']['javascript'];
 		$this->per_page = ($this->attributes['general']['per_page']) ? $this->attributes['general']['per_page'] : 10;
 		$this->list_per_page = ($this->attributes['general']['list_per_page']) ? explode(",",$this->attributes['general']['list_per_page']) : [10,25,50,100];
