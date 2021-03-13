@@ -41,3 +41,6 @@ Run in console :
 6. Then run your php artisan 
 > `php artisan serve`
 
+### Documentation
+
+Check documentation at [Admin Seven Documentation]('http://admin-seven.monsterzgroup.com/')
