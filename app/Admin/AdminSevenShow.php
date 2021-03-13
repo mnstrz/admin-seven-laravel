@@ -101,13 +101,17 @@ trait AdminSevenShow{
 	protected function getDataShow()
 	{
 		$this->beforeShow();
+		$this->showing();
+		$this->afterShow();
+	}
+
+	public function showing(){
 		$data = $this->model::where($this->primary_key,$this->selected_primary_key);
 
 		foreach($this->show_relations as $relation){
 			$data = $data->with($relation);
 		}
 		$this->result_show = $data->first()->toArray();
-		$this->afterShow();
 	}
 
 	/**
@@ -116,11 +120,8 @@ trait AdminSevenShow{
 	 * @method afterShow
 	 * @return void
 	 */
-	public function afterShow($script=null)
+	public function afterShow()
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**
@@ -129,11 +130,8 @@ trait AdminSevenShow{
 	 * @method beforeShow
 	 * @return void
 	 */
-	public function beforeShow($script=null)
+	public function beforeShow()
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**

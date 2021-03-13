@@ -104,6 +104,7 @@ class AdminSevenFormCreator extends Component
 										"can_delete" => true,
 										"custom_action" => [],
 										"form_width" => 12,
+										"show_width" => 12,
 										"url_permission" => false,
 										"javascript" => ($this->crud_name) ? "activeMenu('".$this->crud_name."')" : "",
 										"with_filter" => true,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AdminSevenCrudModel;
+use App\Models\Documentation;
 
 class AdminSevenController extends Controller
 {
@@ -121,5 +122,61 @@ class AdminSevenController extends Controller
             'title','breadcrumb','livewire','plugins'
         ];
         return view('admin-seven',compact($response));
+    }
+
+    /**
+     * documentation
+     * @method documentation
+     * @return void
+     */
+    public function documentation()
+    {
+      \AdminSeven::backendGate('authorize','documentation');
+      $title = 'Documentation';
+      $breadcrumb = [
+        'Documentation' => route('backend.documentation')
+      ];
+      $livewire = "backend-documentation";
+      $plugins = "formAdvance formEditor tableSimple";
+
+      $response = [
+        'title','breadcrumb','livewire','plugins'
+      ];
+      return view('admin-seven',compact($response));
+    }
+
+    /**
+     * edit documentation
+     * @method editDocumentation
+     * @return void
+     */
+    public function editDocumentation(Documentation $documentation)
+    {
+      \AdminSeven::backendGate('authorize','documentation');
+      $title = $documentation->title;
+      $breadcrumb = [
+        'Documentation' => route('backend.documentation')
+      ];
+      $page = "admin.documentation.editor";
+      $plugins = "markdownEditor";
+
+      $response = [
+        'title','breadcrumb','page','plugins','documentation'
+      ];
+      return view('admin-seven',compact($response));
+    }
+
+    /**
+     * edit documentation
+     * @method editDocumentation
+     * @return void
+     */
+    public function saveDocumentation(Request $r, Documentation $documentation)
+    {
+      \AdminSeven::backendGate('authorize','documentation');
+      $content = $r->content;
+      $documentation->content = $content; 
+      $documentation->save();
+      return response()->json($documentation);
     }
 }

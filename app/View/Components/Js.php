@@ -133,6 +133,10 @@ class Js extends Component
         'plugins/filterizr/jquery.filterizr.min.js'
     ];
 
+    protected $markdownEditor = [
+        'plugins/simplemde/simplemde.js'
+    ];
+
     protected $js = [];
     public $renders = '';
 

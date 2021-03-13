@@ -156,6 +156,16 @@
 		                      "Range from 1 - 12"
 		                    ) 
 		      		!!}
+					{!! Form::inputText(
+		                      [2,3],
+		                      "Show Width",
+		                      [
+		                        "placeholder" => "Show Width",
+		                        "wire:model.lazy" => "attributes.general.show_width"
+		                      ],
+		                      "Range from 1 - 12"
+		                    ) 
+		      		!!}
 					{!! Form::selectRadio(
 				              [2,6],
 				              "URL Permisison",
@@ -269,9 +279,9 @@
 							<button class="btn btn-sm {{ AdminSeven::accentSkin() }}" wire:click="addColumnAdd">
 								<i class="fa fa-plus"></i> Add Column
 							</button>
-							<button class="btn btn-sm {{ AdminSeven::accentSkin() }}" data-toggle="modal" data-target="#additional-setting-for-form-create">
+							{{-- <button class="btn btn-sm {{ AdminSeven::accentSkin() }}" data-toggle="modal" data-target="#additional-setting-for-form-create">
 								<i class="fa fa-cog"></i> Additional Setting
-							</button>
+							</button> --}}
 							@endif
 						</div>
 						@endif
@@ -366,9 +376,9 @@
 							<button class="btn btn-sm {{ AdminSeven::accentSkin() }}" wire:click="addColumnEdit">
 								<i class="fa fa-plus"></i> Add Column
 							</button>
-							<button class="btn btn-sm {{ AdminSeven::accentSkin() }}" data-toggle="modal" data-target="#additional-setting-for-form-edit">
+							{{-- <button class="btn btn-sm {{ AdminSeven::accentSkin() }}" data-toggle="modal" data-target="#additional-setting-for-form-edit">
 								<i class="fa fa-cog"></i> Additional Setting
-							</button>
+							</button> --}}
 							@endif
 						</div>
 						@endif

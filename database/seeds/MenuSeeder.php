@@ -125,7 +125,7 @@ class MenuSeeder extends Seeder
                   {
                     "id": 18,
                     "parent": null,
-                    "name": "Creator",
+                    "name": "Magic Creator",
                     "url": "creator",
                     "icon": "fa fa-magic",
                     "sort": 3,
@@ -135,7 +135,7 @@ class MenuSeeder extends Seeder
                   {
                     "id": 21,
                     "parent": null,
-                    "name": "Sample Creator",
+                    "name": "Sample Magic Creator",
                     "url": "sample-creator/creator",
                     "icon": "fas fa-puzzle-piece",
                     "sort": 2,
@@ -149,6 +149,16 @@ class MenuSeeder extends Seeder
                     "url": "configuration",
                     "icon": "fas fa-wrench",
                     "sort": 4,
+                    "created_at": "2021-01-01 00:00:00",
+                    "updated_at": "2021-01-01 00:00:00"
+                  },
+                  {
+                    "id": 23,
+                    "parent": null,
+                    "name": "Documentation",
+                    "url": "documentation",
+                    "icon": "fas fa-book",
+                    "sort": 15,
                     "created_at": "2021-01-01 00:00:00",
                     "updated_at": "2021-01-01 00:00:00"
                   }

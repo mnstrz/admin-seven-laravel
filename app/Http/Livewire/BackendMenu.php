@@ -104,7 +104,7 @@ class BackendMenu extends Component
             $orderDown = ($after) ? "<a wire:click='orderMenu($id,$after)' class=title data-tooltip='true' title='Move to Down'>
                                         <i class='fa fa-arrow-down'></i>
                                     </a>" : '';
-            $childIcon = ($row['parent']) ? '<i class="icon feather icon-corner-down-right text-gray-600"></i>' : '';
+            $childIcon = ($row['parent']) ? '<i class="fas fa-angle-right"></i>' : '';
 
             if(isset($row['child'])){
                 $render .= "<li>
@@ -156,6 +156,7 @@ class BackendMenu extends Component
 
     public function addChild($id=null)
     {
+        $this->resetForm();
         $this->dispatchBrowserEvent('add');
         $this->parent = $id;
         $group = Group::all();
@@ -167,7 +168,7 @@ class BackendMenu extends Component
     }
 
     public function editMenu($id){
-
+        $this->resetForm();
         $this->dispatchBrowserEvent('edit');
         $menu = Menu::find($id);
         $group = [];

@@ -1,5 +1,5 @@
 <div>
-	<div class="row">
+	<div class="row mb-3">
 		<div class="col-12">
 			<button class="btn {{ AdminSeven::accentSkin() }} btn-sm" wire:click="addChild()">
 				<i class="fa fa-plus"></i> Add New Main Menu

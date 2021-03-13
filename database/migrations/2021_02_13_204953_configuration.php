@@ -13,6 +13,7 @@ class Configuration extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('configuration');
         Schema::create('configuration', function (Blueprint $table) {
             $table->increments('id',11);
             $table->string('app_name')->nullable();

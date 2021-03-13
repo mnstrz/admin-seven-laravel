@@ -55,7 +55,7 @@ class TemplateController extends Controller
      */
     public function dashboard()
     {
-        $title = $this->title;
+        $title = 'Dashboard';
         $breadcrumb = $this->breadcrumb;
         $page = "admin.template.dashboard";
         $plugins = $this->plugins;

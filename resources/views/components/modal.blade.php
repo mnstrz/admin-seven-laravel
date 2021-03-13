@@ -1,5 +1,5 @@
 <div class="modal fade" id="{{ \Str::slug($modal_title,"-") }}" wire:ignore.self>
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog {{ ($modal_size) ? 'modal-'.$modal_size : 'modal-lg' }}">
       <div class="modal-content {{ ($modal_color) ? 'bg-'.$modal_color : '' }}">
         <div class="modal-header">
           <h4 class="modal-title">{{ $modal_title }}</h4>

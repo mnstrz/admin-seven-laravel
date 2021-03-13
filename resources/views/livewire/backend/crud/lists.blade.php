@@ -129,12 +129,12 @@
 				          				@php
 				          					$link = explode("|", $row['link']);
 				          				@endphp
-				          				<a href="{{ $link[0] }}" class="mr-1 btn {{ AdminSeven::accentSkin() }} btn-sm {{ ($row['color']) ? 'bg-'.$row['color'] : '' }}" data-tooltip="true" title="{{ $row['title'] }}" target="{{ (isset($link[1])) ? $link[1] : '' }}">
+				          				<a href="{{ $link[0] }}/{{ ($row['field']) ? $value[$row['field']] : $value[$primary_key] }}" class="mr-1 btn btn-sm {{ ($row['color']) ? 'bg-'.$row['color'] : AdminSeven::accentSkin() }}" data-tooltip="true" title="{{ $row['title'] }}" target="{{ (isset($link[1])) ? $link[1] : '' }}">
 				          					<i class="{{ $row['icon'] }}"></i>
 				          					<span>{{ $row['label'] }}</span>
 				          				</a>
 				          			@else
-				          				<button class="mr-1 btn {{ AdminSeven::accentSkin() }} btn-sm {{ ($row['color']) ? 'bg-'.$row['color'] : '' }}" data-tooltip="true" title="{{ $row['title'] }}" wire:click="{{ $row['event']}}('{{ $value[$primary_key] }}'{{ ($row['field']) ? ",'".$value[$row['field']]."'" : "" }})">
+				          				<button class="mr-1 btn btn-sm {{ ($row['color']) ? 'bg-'.$row['color'] : AdminSeven::accentSkin() }}" data-tooltip="true" title="{{ $row['title'] }}" wire:click="{{ $row['event']}}('{{ $value[$primary_key] }}'{{ ($row['field']) ? ",'".$value[$row['field']]."'" : "" }})">
 				          					<i class="{{ $row['icon'] }}"></i>
 				          					<span>{{ $row['label'] }}</span>
 				          				</button>

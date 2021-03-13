@@ -211,6 +211,11 @@ trait AdminSevenLists{
 	protected function getData()
 	{
 		$this->beforeShowList();
+		$this->showingList();
+		$this->afterShowList();
+	}
+
+	public function showingList(){
 		if(isset($this->model))
 		{
 
@@ -248,7 +253,6 @@ trait AdminSevenLists{
 
 			$this->createPagination($data);
 		}
-		$this->afterShowList();
 	}
 
 	/**
@@ -319,9 +323,6 @@ trait AdminSevenLists{
 	 */
 	public function beforeShowList($script=null)
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**
@@ -332,9 +333,6 @@ trait AdminSevenLists{
 	 */
 	public function afterShowList($script=null)
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**
@@ -566,11 +564,8 @@ trait AdminSevenLists{
 	 * before delete
 	 * @method beforeDelete
 	 */
-	public function beforeDelete($script=null)
+	public function beforeDelete()
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**
@@ -585,11 +580,8 @@ trait AdminSevenLists{
 	 * after delete
 	 * @method afterDelete
 	 */
-	public function afterDelete($script=null)
+	public function afterDelete()
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**

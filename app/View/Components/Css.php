@@ -93,6 +93,10 @@ class Css extends Component
         'plugins/ekko-lightbox/ekko-lightbox.css'
     ];
 
+    protected $markdownEditor = [
+        'plugins/simplemde/simplemde.css'
+    ];
+
     protected $css = [];
     public $renders = '';
 

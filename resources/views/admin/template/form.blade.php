@@ -156,7 +156,6 @@
         :column="'2:6'" 
         :label="'Textarea'" 
         :class="''"
-        :path="''"
         placeholder="Text here"
         name="textarea"
         value=""

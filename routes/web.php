@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'Frontend\HomeController@index')->name('home');
+Route::get('/documentation', function () {
+    abort('404');
 });
+Route::post('/documentation', 'Frontend\HomeController@getDocumentation')->name('documentation');
 
 /**
  * Backend route here
@@ -53,6 +55,11 @@ Route::group([ 'prefix' => "backend"], function(){
 
 		/*show creator*/
 		Route::get('{crud_slug}/creator', 'Admin\AdminSevenController@makeCreator')->name('backend.creator.make');
+
+		/*documentation*/
+		Route::get('/documentation', 'Admin\AdminSevenController@documentation')->name('backend.documentation');
+		Route::get('/documentation/{documentation}/editor', 'Admin\AdminSevenController@editDocumentation')->name('backend.documentation.editor');
+		Route::post('/documentation/{documentation}/save', 'Admin\AdminSevenController@saveDocumentation')->name('backend.documentation.save');
 	});
 
 });

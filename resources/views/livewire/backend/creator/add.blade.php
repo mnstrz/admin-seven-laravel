@@ -47,6 +47,8 @@
               ]
             )
 !!}
+@endif
+@if($attributes['column_add'][$selected_column_add]['type'] == "uploadImage")
 {!! Form::inputText(
               [3,9],
               "Image Setting",
@@ -120,7 +122,7 @@
               ]
             )
 !!}
-{!! Form::inputTextarea(
+{{-- {!! Form::inputTextarea(
               [3,9],
               "Event",
               [
@@ -129,7 +131,7 @@
               ],
               "Watch Livewire Documentation Ex : wire:click='OpenModal'"
             )
-!!}
+!!} --}}
 {!! Form::selectRadio(
               [3,9],
               "Ignore",

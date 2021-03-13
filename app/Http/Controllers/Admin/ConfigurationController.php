@@ -77,7 +77,7 @@ class ConfigurationController extends Controller
      */
     public function menu()
     {
-      \AdminSeven::backendGate('authorize','menu');
+      \AdminSeven::backendGate('authorize','config-menu');
       $title = 'Menu '.$this->title;
       $breadcrumb = [
         'Configuration' => '#',

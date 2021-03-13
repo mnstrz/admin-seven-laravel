@@ -79,6 +79,14 @@ trait AdminSevenCrud{
 		$this->model = 'App\\'.$model;
 	}
 
+	protected function primaryKey($field){
+		$this->primary_key = $field;
+	}
+
+	protected function disableUriPermission(){
+		$this->url_permission = false;
+	}
+
 	/**
 	 * set relation table
 	 * @method setModel

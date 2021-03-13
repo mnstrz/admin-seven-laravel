@@ -32,6 +32,7 @@ class MakeCreator extends Component
 		$this->can_add = $this->attributes['general']['can_add'];
 		$this->can_show = $this->attributes['general']['can_show'];
 		$this->form_width = $this->attributes['general']['form_width'];
+		$this->show_width = $this->attributes['general']['show_width'];
 		$this->url_permission = $this->attributes['general']['url_permission'];
 		$this->javascript = $this->attributes['general']['javascript'];
 		$this->per_page = ($this->attributes['general']['per_page']) ? $this->attributes['general']['per_page'] : 10;
@@ -91,15 +92,19 @@ class MakeCreator extends Component
 	public function setShow()
 	{
 		$this->row_show = $this->attributes['show'];
-		$relations = explode(",",$this->attributes['show_relation']);
-		$this->show_relations = $relations;
+		if($this->attributes['show_relation']){
+			$relations = explode(",",$this->attributes['show_relation']);
+			$this->show_relations = $relations;
+		}
 	}
 
 	public function setLists()
 	{
 		$this->lists_fields = $this->attributes['list'];
-		$relations = explode(",",$this->attributes['list_relation']);
-		$this->lists_relations = $relations;
+		if($this->attributes['list_relation']){
+			$relations = explode(",",$this->attributes['list_relation']);
+			$this->lists_relations = $relations;
+		}
 	}
 
 	public function setFilter()

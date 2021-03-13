@@ -13,6 +13,21 @@
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<td colspan="2">Relations</td>
+				<td colspan="6">
+					{!! Form::inputText(
+			              [0,12],
+			              "",
+			              [
+			              	"name" => "show_relation",
+			                "placeholder" => "Example : thisGroup,thisCountry",
+			                "wire:model.lazy" => "attributes.show_relation"
+			              ]
+			            )
+					!!}
+				</td>
+			</tr>
 			@foreach($attributes['show'] as $key => $show)
 			<tr>
 				<td>{{ $key+1 }}</td>
@@ -103,7 +118,7 @@
 				</td>
 			</tr>
 			@endforeach
-			<tr>
+			{{-- <tr>
 				<td colspan="2">Before Showed</td>
 				<td colspan="6">
 					{!! Form::inputTextarea(
@@ -130,22 +145,7 @@
 			            )
 					!!}
 				</td>
-			</tr>
-			<tr>
-				<td colspan="2">Relations</td>
-				<td colspan="6">
-					{!! Form::inputTextarea(
-			              [0,12],
-			              "",
-			              [
-			              	"name" => "show_relation",
-			                "placeholder" => "Type Script Here",
-			                "wire:model.lazy" => "attributes.show_relation"
-			              ]
-			            )
-					!!}
-				</td>
-			</tr>
+			</tr> --}}
 		</tbody>
 	</table>
 </div>

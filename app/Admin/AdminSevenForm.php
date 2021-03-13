@@ -73,7 +73,6 @@ trait AdminSevenForm{
 		$this->closeMessage();
 		$this->view = 'form';
 		$this->form_mode = 'add';
-		$this->afterAdd();
 	}
 
 
@@ -82,11 +81,9 @@ trait AdminSevenForm{
 	 * @method beforeAdd
 	 * @return void
 	 */
-	public function beforeAdd($script=null)
+	public function beforeAdd()
 	{
-		if($script){
-			eval($script);
-		}
+
 	}
 
 	/**
@@ -94,11 +91,9 @@ trait AdminSevenForm{
 	 * @method afterAdd
 	 * @return void
 	 */
-	public function afterAdd($script=null)
+	public function afterAdd()
 	{
-		if($script){
-			eval($script);
-		}
+
 	}
 
 	/**
@@ -119,7 +114,6 @@ trait AdminSevenForm{
 		$this->form_mode = 'edit';
 		$this->selected_primary_key = $id;
 		$this->getDataEdit();
-		$this->afterEdit();
 	}
 
 
@@ -128,11 +122,9 @@ trait AdminSevenForm{
 	 * @method beforeEdit
 	 * @return void
 	 */
-	public function beforeEdit($script=null)
+	public function beforeEdit()
 	{
-		if($script){
-			eval($script);
-		}
+
 	}
 
 	/**
@@ -140,11 +132,9 @@ trait AdminSevenForm{
 	 * @method afterEdit
 	 * @return void
 	 */
-	public function afterEdit($script=null)
+	public function afterEdit()
 	{
-		if($script){
-			eval($script);
-		}
+
 	}
 
 	/**
@@ -242,6 +232,7 @@ trait AdminSevenForm{
 			$this->afterStore();
 			$this->finishStore();
 			$this->showMessage('success','Data added successfully!');
+			$this->afterAdd();
 		} catch (Exception $e) {
 			$this->showMessage('danger','Failed to store data! '. $e);
 		}
@@ -264,6 +255,7 @@ trait AdminSevenForm{
 			$this->finishUpdate();
 			$this->selected_primary_key = null;
 			$this->showMessage('success','Data updated successfully!');
+			$this->afterEdit();
 		} catch (Exception $e) {
 			$this->showMessage('danger','Failed to update data! '. $e);
 		}
@@ -373,9 +365,6 @@ trait AdminSevenForm{
 	 */
 	public function beforeStore($script=null)
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**
@@ -386,9 +375,6 @@ trait AdminSevenForm{
 	 */
 	public function beforeUpdate($script=null)
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**
@@ -658,9 +644,6 @@ trait AdminSevenForm{
 	 */
 	public function afterStore($script=null)
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**
@@ -671,9 +654,6 @@ trait AdminSevenForm{
 	 */
 	public function afterUpdate($script=null)
 	{
-		if($script){
-			eval($script);
-		}
 	}
 
 	/**

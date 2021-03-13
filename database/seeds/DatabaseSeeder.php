@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             FakeTableSeeder::class,
             ThemeSeeder::class,
             AdminSevenThemeSeeder::class,
-            ConfigurationSeeder::class
+            ConfigurationSeeder::class,
+            DocumentationSeeder::class
         ]);
     }
 }
