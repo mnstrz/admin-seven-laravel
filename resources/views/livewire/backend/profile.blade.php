@@ -31,17 +31,17 @@
 	                      [4,8],
 	                      "Avatar",
 	                      [
-	                        "name" => "avatar",
+	                        "name" => "new_avatar",
 	                        "color" => "info",
-	                        "wire:model" => "new_avatar"
+	                        "wire:model.lazy" => "new_avatar"
 	                      ],
 	                      [
 	                      	"aspectRatio" => "1/1"
 	                      ],
-	                      ""
+	                      $avatar_path
 	                    ) 
 				    !!}
-				    {{ $this->this_filename('avatar') }}
+				    {{ $this->this_filename('new_avatar') }}
 	      			{!! Form::inputTextAppend(
 	                      [4,8],
 	                      "Username",
