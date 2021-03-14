@@ -105,6 +105,21 @@ class MakeCreator extends Component
 			$relations = explode(",",$this->attributes['list_relation']);
 			$this->lists_relations = $relations;
 		}
+		if(isset($this->attributes['order_by'])){
+			if($this->attributes['order_by']){
+				$json = "[".$this->attributes['order_by']."]";
+				$data = json_decode($json,true);
+				$order_by = [];
+				foreach($data as $key => $row){
+					$new = [
+						"field" => key($row),
+						"sort" => $row[key($row)]
+					];
+					array_push($order_by, $new);
+				}
+				$this->order_by = $order_by;
+			}
+		}
 	}
 
 	public function setFilter()

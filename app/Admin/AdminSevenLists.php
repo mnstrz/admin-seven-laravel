@@ -9,6 +9,7 @@ trait AdminSevenLists{
 
 	public $lists_fields = [];
 	public $lists_relations = [];
+	public $order_by = [];
 	public $results = [];
 
 	public $can_add = true;
@@ -247,6 +248,12 @@ trait AdminSevenLists{
 				}
 			}
 			$data = $this->addQuery($data);
+			#order by
+			if(count($this->order_by) > 0){
+				foreach($this->order_by as $order) {
+					$data = $data->orderBy($order['field'],$order['sort']);
+				}
+			}
 			$data = $data->paginate($this->per_page,['*'],"page",$this->page)
 						 ->toArray();
 			$this->results = $data['data'];
@@ -618,6 +625,22 @@ trait AdminSevenLists{
 	 */
 	public function canDelete($can){
 		$this->can_delete = $can;
+	}
+
+	/**
+	 * order by
+	 * @method listOrderBy
+	 * @param string $field
+	 * @param string $sort
+	 */
+	public function listOrderBy($field,$sort="asc"){
+		$order_by = $this->order_by;
+		$new = [
+			"field" => $field,
+			"sort" => $sort
+		];
+		array_push($order_by,$new);
+		$this->order_by = $order_by;
 	}
 
 }

@@ -28,6 +28,21 @@
 					!!}
 				</td>
 			</tr>
+			<tr>
+				<td colspan="2">Order By</td>
+				<td colspan="6">
+					{!! Form::inputText(
+	                      [0,12],
+	                      "",
+	                      [
+	                        "placeholder" => "Order By",
+	                        "wire:model.lazy" => "attributes.order_by"
+	                      ],
+	                      'Ex : {"id":"asc"},{"username":"asc"},{"address":"desc"}'
+	                    ) 
+      				!!}
+				</td>
+			</tr>
 			@foreach($attributes['list'] as $key => $list)
 			<tr>
 				<td>{{ $key+1 }}</td>

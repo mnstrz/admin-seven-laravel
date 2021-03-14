@@ -116,6 +116,7 @@ class AdminSevenFormCreator extends Component
 									"filter" => [],
 									"list_relation" => "",
 									"show_relation" => "",
+									"order_by" => ""
 								];
 		}
 	}

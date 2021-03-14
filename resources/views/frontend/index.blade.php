@@ -8,7 +8,11 @@
 					<div class="col-12 px-0">
 						<div class="brand">
 							<div class="d-flex flex-row align-items-center justify-content-center">
-								<img src="{{ \Storage::url(AdminSeven::appConfig()->logo) }}" width="40px">
+								@if(AdminSeven::appConfig()->logo)
+									<img src="{{ \Storage::url(AdminSeven::appConfig()->logo) }}" width="40px">
+								@else
+									<img src="{{ asset('admin/images/admin-seven-logo.png') }}" width="40px">
+								@endif
 								<h5 class="mt-3">{{ AdminSeven::appConfig()->app_name }}</h5>
 							</div>
 							<div class="d-flex flex-row justify-content-center">

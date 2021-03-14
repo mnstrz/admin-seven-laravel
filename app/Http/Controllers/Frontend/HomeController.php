@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-    	$title = 'Home';
+    	$title = 'Documentation';
         $data = Documentation::orderBy('sort','asc')->get();
         $menu = [];
         foreach($data as $row){
