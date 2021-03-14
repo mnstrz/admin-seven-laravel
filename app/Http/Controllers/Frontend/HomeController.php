@@ -16,6 +16,10 @@ class HomeController extends Controller
     public function index()
     {
     	$title = 'Documentation';
+        $data = Documentation::all()->toArray();
+        data_set($data,'*.created_at','2021-01-01 00:00:00');
+        data_set($data,'*.updated_at','2021-01-01 00:00:00');
+        return response()->json($data);
         $data = Documentation::orderBy('sort','asc')->get();
         $menu = [];
         foreach($data as $row){

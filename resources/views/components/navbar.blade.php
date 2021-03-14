@@ -100,10 +100,14 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          @if(file_exists(\Storage::path(AdminSeven::UserInfo()->avatar)))
-          <img src="{{ \Storage::url(AdminSeven::UserInfo()->avatar) }}" class="img-circle elevation-2" alt="User Image">
+          @if(AdminSeven::UserInfo()->avatar)
+            @if(file_exists(\Storage::path(AdminSeven::UserInfo()->avatar)))
+            <img src="{{ \Storage::url(AdminSeven::UserInfo()->avatar) }}" class="img-circle elevation-2" alt="User Image">
+            @else
+            <i class="fas fa-user-circle fa-2x"></i>
+            @endif
           @else
-          <i class="fas fa-user-circle fa-2x"></i>
+            <i class="fas fa-user-circle fa-2x"></i>
           @endif
         </div>
         <div class="info">
