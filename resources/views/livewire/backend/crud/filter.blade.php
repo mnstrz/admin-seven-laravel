@@ -25,7 +25,7 @@
                         "value" => null,
                         "wire:model.lazy" => 'filters.'.$row['field']
                       ],
-                      $row['relation']
+                      (count($row['options']) > 0) ? $row['options'] : $row['relation']
                     ) 
     !!}
 	@elseif($row['type'] == "selectCheckbox")
@@ -38,7 +38,7 @@
                         "value" => null,
                         "wire:model.lazy" => 'filters.'.$row['field']
                       ],
-                      $row['relation']
+                      (count($row['options']) > 0) ? $row['options'] : $row['relation']
                     ) 
     !!}
 	@else
