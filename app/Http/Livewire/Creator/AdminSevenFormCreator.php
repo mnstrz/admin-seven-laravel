@@ -641,15 +641,19 @@ class AdminSevenFormCreator extends Component
 			if($column[$text] != null || $column[$text] != ""){
 				$json = "[".$column[$text]."]";
 				$data = json_decode($json,true);
-				$new_data = [];
-				foreach($data as $row){
-					if(is_array($row)){
-						$new_data[key($row)] = $row[key($row)];
-					}else{
-						array_push($new_data,$row);
+				if($data){
+					$new_data = [];
+					foreach($data as $row){
+						if(is_array($row)){
+							$new_data[key($row)] = $row[key($row)];
+						}else{
+							array_push($new_data,$row);
+						}
 					}
+					$attributes[$type][$key][$array] = $new_data;
+				}else{
+					$attributes[$type][$key][$array] = [];
 				}
-				$attributes[$type][$key][$array] = $new_data;
 			}else{
 				$attributes[$type][$key][$array] = [];
 			}

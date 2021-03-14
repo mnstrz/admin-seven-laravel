@@ -107,17 +107,27 @@ class MakeCreator extends Component
 		}
 		if(isset($this->attributes['order_by'])){
 			if($this->attributes['order_by']){
+				$order_by = [];
 				$json = "[".$this->attributes['order_by']."]";
 				$data = json_decode($json,true);
-				$order_by = [];
-				foreach($data as $key => $row){
-					$new = [
-						"field" => key($row),
-						"sort" => $row[key($row)]
-					];
-					array_push($order_by, $new);
+				if($data){
+					if(is_array($data)){
+						foreach($data as $key => $row){
+							$new = [
+								"field" => key($row),
+								"sort" => $row[key($row)]
+							];
+							array_push($order_by, $new);
+						}
+					}else{
+						$new = [
+							"field" => key($data),
+							"sort" => $data[key($data)]
+						];
+						array_push($order_by, $new);
+					}
+					$this->order_by = $order_by;
 				}
-				$this->order_by = $order_by;
 			}
 		}
 	}
