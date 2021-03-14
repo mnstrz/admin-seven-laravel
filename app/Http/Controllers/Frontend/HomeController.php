@@ -20,7 +20,6 @@ class HomeController extends Controller
      data_set($data,'*.updated_at','2021-01-01 00:00:00');
      return response()->json($data);
      */
-     */
     public function index()
     {
     	$title = 'Documentation';
