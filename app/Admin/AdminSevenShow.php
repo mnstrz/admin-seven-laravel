@@ -111,6 +111,7 @@ trait AdminSevenShow{
 		foreach($this->show_relations as $relation){
 			$data = $data->with($relation);
 		}
+		$data = $this->addShowQuery($data);
 		$this->result_show = $data->first()->toArray();
 	}
 
@@ -132,6 +133,17 @@ trait AdminSevenShow{
 	 */
 	public function beforeShow()
 	{
+	}
+
+	/**
+	 * more query
+	 *
+	 * @method addShowQuery
+	 * @param data $data
+	 * @return array
+	 */
+	public function addShowQuery($data){
+		return $data;
 	}
 
 	/**
