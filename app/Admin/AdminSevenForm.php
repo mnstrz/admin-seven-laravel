@@ -105,7 +105,6 @@ trait AdminSevenForm{
 	public function edit($id)
 	{
 		$this->selected_primary_key = null;
-		$this->beforeEdit();
 		if(!$this->can_edit){
 			abort('403');
 		}
@@ -113,6 +112,7 @@ trait AdminSevenForm{
 		$this->view = 'form';
 		$this->form_mode = 'edit';
 		$this->selected_primary_key = $id;
+		$this->beforeEdit();
 		$this->getDataEdit();
 	}
 

@@ -80,6 +80,11 @@ class BackendPermission extends Component
 		}
 	}
 
+	public function beforeAdd()
+	{
+		$this->form_add['group'] = [];
+	}
+
 	public function beforeEdit()
 	{
 		$group_permission = GroupPermission::where('permission',$this->selected_primary_key)->get();
