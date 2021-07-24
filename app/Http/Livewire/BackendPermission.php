@@ -80,7 +80,7 @@ class BackendPermission extends Component
 		}
 	}
 
-	public function afterEdit()
+	public function beforeEdit()
 	{
 		$group_permission = GroupPermission::where('permission',$this->selected_primary_key)->get();
 		$form_group = [];
@@ -129,7 +129,7 @@ class BackendPermission extends Component
 		GroupPermission::where('permission',$this->selected_primary_key)->delete();
 	}
 
-	public function updatedForm()
+	public function updatedFormAdd()
 	{
 		$this->form_add['group'] = $this->form_add['group'];
 	}
