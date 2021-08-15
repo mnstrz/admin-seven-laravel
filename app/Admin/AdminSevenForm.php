@@ -66,6 +66,7 @@ trait AdminSevenForm{
 	 */
 	public function add()
 	{
+		$this->setDefaultValue();
 		$this->beforeAdd();
 		if(!$this->can_add){
 			abort('403');
@@ -73,6 +74,15 @@ trait AdminSevenForm{
 		$this->closeMessage();
 		$this->view = 'form';
 		$this->form_mode = 'add';
+	}
+
+	public function setDefaultValue()
+	{
+		$forms = $this->form_add_setting;
+		foreach($forms as $key => $form)
+		{
+			$this->form_add[$form['field']] = $form['value'];
+		}
 	}
 
 
@@ -158,11 +168,7 @@ trait AdminSevenForm{
 				foreach($this->form_edit_setting as $key => $form){
 					if($form['field'] == $field){
 						if($form['type'] != 'inputPassword'){
-							if($form['value'] === NULL){
-								$form_edit[$field] = $row;
-							}else{
-								$form_edit[$field] = $form['value'];
-							}
+							$form_edit[$field] = $row;
 						}
 						if($form['type'] == 'uploadImage'){
 							$this->form_edit_setting[$key]['path'] = $row;
