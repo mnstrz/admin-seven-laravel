@@ -28,17 +28,11 @@ Run in console :
 1. Install composer
 >  `composer install`
 
-2. Dump vendor package, migration and seeder
-> `composer dump-autoload -o`
+2. Run command
+> `php artisan install:first`
 
-3. Run migration
-> `php artisan migrate`
-
-4. Run Seeder
-> `php artisan db:seed`
-
-5. Make sure your table into database has been created, and the data are imported
-6. Then run your php artisan 
+3. Make sure your table into database has been created, and the data are imported
+4. Then run your php artisan 
 > `php artisan serve`
 
 ### Documentation
