@@ -83,7 +83,6 @@ class BackendProfile extends Component
 			}
 
 			# make new password
-			$this->password = Hash::make($this->password);
 			$user->password = $this->password;
 		}
 

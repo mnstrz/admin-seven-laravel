@@ -108,7 +108,7 @@ function paging(element,data){
     var currentpage = (data.current_page) ? data.current_page : 1;
     var firstpage = (data.first_page) ? data.first_page : 1;
     var lastpage = (data.last_page) ? data.last_page : 10;
-    var total = (data.total) ? data.total : 100;
+    var total = data.total;
     var perpage = (data.per_page) ? data.per_page : 10;
 
     var prevpage = (currentpage <= 1) ? 1 : currentpage-1;
@@ -165,7 +165,10 @@ function paging(element,data){
                   </button>
                 </li>`;
 
-      $(element).html(button);
+      if(total > 0){
+        $(element).html(button);
+      }
+
 }
 
 $(document).on('click','.nav-btn',function(e)
